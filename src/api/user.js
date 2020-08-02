@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 // 用户登录
 export function login(data) {
-  const form = {
+  const loginParams = {
     username: data.username,
     password: data.password,
     grant_type: 'password',
@@ -10,29 +10,23 @@ export function login(data) {
   }
   return request({
     url: '/ses-oauth/oauth/login/v1',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic dGVzdF9jbGllbnQ6dGVzdF9zZWNyZXQ='
-    },
     method: 'post',
-    params: form
+    data: loginParams
   })
 }
 
 // 用户信息
 export function getInfo(token) {
   return request({
-    url: '/organization/user',
-    method: 'get',
-    params: { uniqueId: 'admin' }
+    url: '/ses-oauth/oauth/user/info',
+    method: 'get'
   })
 }
 
 // 退出登录
 export function logout() {
-  return Promise.resolve({
-    code: "000000",
-    mesg: "成功",
-    time: new Date(),
+  return request({
+    url: '/ses-oauth/oauth/logout',
+    method: 'get'
   })
 }

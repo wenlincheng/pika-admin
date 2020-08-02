@@ -29,13 +29,13 @@ const mutations = {
 }
 
 const actions = {
-  // user login
+  // 用户登录存储令牌
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
-        commit('SET_TOKEN', response.access_token)
-        setToken(response.access_token)
+        commit('SET_TOKEN', response.data.accessToken)
+        setToken(response.data.accessToken)
         resolve()
       }).catch(error => {
         console.error(error)
@@ -44,17 +44,17 @@ const actions = {
     })
   },
 
-  // get user info
+  // 获取用户信息并存储
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('权限不足,无法访问')
         }
 
-        const { name, description } = data
+        const { name, avatar, description } = data
 
         // roles must be a non-empty array
         // if (!roleIds || roleIds.length <= 0) {
@@ -63,17 +63,18 @@ const actions = {
 
         commit('SET_ROLES', ['admin'])
         commit('SET_NAME', name)
-        commit('SET_AVATAR', 'https://avatars3.githubusercontent.com/u/3946731?s=460&v=4')
+        commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', description)
         data.roles = ['admin']
         resolve(data)
+        console.log(data)
       }).catch(error => {
         reject(error)
       })
     })
   },
 
-  // user logout
+  // 退出登录
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {

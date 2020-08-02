@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">用户登录</h3>
+        <h3 class="title">商城后台管理</h3>
       </div>
       <!-- 用户名 -->
       <el-form-item prop="username">
@@ -59,13 +59,13 @@
       </div>-->
     </el-form>
 
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
+<!--    <el-dialog title="Or connect with" :visible.sync="showDialog">
       Can not be simulated on local, so please combine you own business simulation! ! !
       <br>
       <br>
       <br>
       <social-sign />
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
 

@@ -14,12 +14,13 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    console.log("-------> 发送请求")
-
+    console.log('-------> 发送请求')
+    // 设置令牌
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
+      console.log(getToken())
       config.headers['Authorization'] = 'Bearer ' + getToken()
     }
     return config

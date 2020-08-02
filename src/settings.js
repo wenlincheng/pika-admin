@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'SpringCloud Admin',
+  title: '商城后台管理',
 
   /**
    * @type {boolean} true | false
