@@ -27,7 +27,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/profile/index">
-            <el-dropdown-item>头像</el-dropdown-item>
+            <el-dropdown-item>用户详情</el-dropdown-item>
           </router-link>
           <router-link to="/">
             <el-dropdown-item>图表</el-dropdown-item>
@@ -36,7 +36,7 @@
             <el-dropdown-item>Docs</el-dropdown-item>
           </a>
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">退出</span>
+            <span style="display:block;" @click="logout">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

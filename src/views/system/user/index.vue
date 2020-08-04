@@ -40,12 +40,9 @@
       </el-select>
 
       <!--动作按钮-->
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        搜索
-      </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新增
-      </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
       <el-button
         v-waves
         class="filter-item"
@@ -81,6 +78,12 @@
       <el-table-column width="150px" align="center" label="姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="性别" width="80px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.gender | genderFilter }}</span>
         </template>
       </el-table-column>
 
@@ -205,8 +208,8 @@
 </template>
 
 <script>
-import { queryUser, getUser, createUser, updateUser, deleteUser } from '@/api/organization/user'
-import { getAllRoles } from '@/api/organization/role'
+import { queryUser, getUser, createUser, updateUser, deleteUser } from '@/api/system/user'
+import { getAllRoles } from '@/api/system/role'
 
 import waves from '@/directive/waves'
 
@@ -231,6 +234,14 @@ export default {
         1: '激活'
       }
       return statusMap[status]
+    },
+    genderFilter(gender) {
+      const genderMap = {
+        0: '未知',
+        1: '男',
+        2: '女'
+      }
+      return genderMap[gender]
     }
   },
   data() {
@@ -297,6 +308,14 @@ export default {
     // 查询过滤器
     handleFilter() {
       this.listQuery.current = 1
+      this.queryUser()
+    },
+    // 重置搜索条件
+    handleRefresh() {
+      this.listQuery = {
+        current: 1,
+        size: 10
+      }
       this.queryUser()
     },
     /**

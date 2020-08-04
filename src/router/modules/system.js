@@ -2,10 +2,10 @@
 
 import Layout from '@/layout'
 
-const organizationRouter = {
-  path: '/organization',
+const systemRouter = {
+  path: '/system',
   component: Layout,
-  redirect: '/organization/user',
+  redirect: '/system/user',
   name: 'Organization',
   meta: {
     title: '系统管理',
@@ -13,8 +13,8 @@ const organizationRouter = {
   },
   children: [
     {
-      path: '/organization/user',
-      component: () => import('@/views/organization/user'),
+      path: '/system/user',
+      component: () => import('@/views/system/user'),
       name: 'User',
       meta: {
         title: '用户管理',
@@ -22,8 +22,8 @@ const organizationRouter = {
       }
     },
     {
-      path: '/organization/role',
-      component: () => import('@/views/organization/role'),
+      path: '/system/role',
+      component: () => import('@/views/system/role'),
       name: 'Role',
       meta: {
         title: '角色管理',
@@ -31,16 +31,25 @@ const organizationRouter = {
       }
     },
     {
-      path: '/organization/group',
-      component: () => import('@/views/organization/group'),
+      path: '/system/menu',
+      component: () => import('@/views/system/menu'),
+      name: 'Menu',
+      meta: {
+        title: '菜单管理',
+        icon: 'table'
+      }
+    },
+    {
+      path: '/system/group',
+      component: () => import('@/views/system/group'),
       name: 'Group',
       meta: {
         title: '组织架构',
         icon: 'group'
       }
     }, {
-      path: '/organization/gateway',
-      component: () => import('@/views/organization/gateway'),
+      path: '/system/gateway',
+      component: () => import('@/views/system/gateway'),
       name: 'Gateway',
       meta: {
         title: '路由管理',
@@ -50,4 +59,4 @@ const organizationRouter = {
   ]
 }
 
-export default organizationRouter
+export default systemRouter

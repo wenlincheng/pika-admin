@@ -63,7 +63,7 @@
 </template>
 
 <script>
-  import { fetchGroupByParentId, getGroup } from '@/api/organization/group'
+  import { fetchGroupByParentId, getGroup } from '@/api/system/group'
 
   export default {
     name: 'groupManagement',

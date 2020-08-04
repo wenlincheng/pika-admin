@@ -31,9 +31,8 @@
         />
       </el-select>
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        搜索
-      </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -191,8 +190,8 @@
 </template>
 
 <script>
-import { queryRole, createRole, updateRole, deleteRole, getRole } from '@/api/organization/role'
-import { queryAllResource } from '@/api/organization/resource'
+import { queryRole, createRole, updateRole, deleteRole, getRole } from '@/api/system/role'
+import { queryAllResource } from '@/api/system/resource'
 import waves from '@/directive/waves' // 水波纹指令
 
 export default {
@@ -265,6 +264,14 @@ export default {
     },
     handleFilter() {
       this.listQuery.current = 1
+      this.queryRole()
+    },
+    // 重置搜索条件
+    handleRefresh() {
+      this.listQuery = {
+        current: 1,
+        size: 10
+      }
       this.queryRole()
     },
     /**

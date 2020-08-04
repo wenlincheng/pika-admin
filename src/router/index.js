@@ -7,8 +7,13 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import organizationRouter from './modules/organization'
+import systemRouter from './modules/system'
+import productRouter from './modules/product'
+import orderRouter from './modules/order'
+import contentRouter from './modules/content'
 import devopsRouter from './modules/deops'
+import tableRouter from './modules/table'
+import nestedRouter from './modules/nested'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -103,10 +108,12 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
-  organizationRouter,
+  productRouter,
+  orderRouter,
+  contentRouter,
   devopsRouter,
-  // nestedRouter,
-  // tableRouter,
+  nestedRouter,
+  tableRouter,
   {
     path: '/github',
     component: Layout,
@@ -129,6 +136,7 @@ export const asyncRoutes = [
       }
     ]
   },
+  systemRouter,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
