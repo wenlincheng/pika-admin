@@ -1,7 +1,7 @@
 {
-  "name": "springcloud-admin",
+  "name": "ses-admin",
   "version": "0.0.1",
-  "description": "SpringCloud微服务治理平台前端项目",
+  "description": "社区电商平台后台管理",
   "author": "zhoutaoo@foxmail.com",
   "license": "MIT",
   "scripts": {
@@ -27,19 +27,9 @@
     ]
   },
   "keywords": [
-    "vue",
-    "admin",
-    "springcloud",
-    "element-ui",
-    "management-system"
+    "社区",
+    "电商"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zhoutaoo/springcloud-admin.git"
-  },
-  "bugs": {
-    "url": "https://github.com/zhoutaoo/springcloud-admin/issues"
-  },
   "dependencies": {
     "axios": "0.18.1",
     "clipboard": "2.0.4",

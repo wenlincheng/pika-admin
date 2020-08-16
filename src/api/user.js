@@ -9,7 +9,7 @@ export function login(data) {
     scope: 'read'
   }
   return request({
-    url: '/ses-oauth/oauth/login/v1',
+    url: '/pika-auth/login/v1',
     method: 'post',
     data: loginParams
   })
@@ -18,7 +18,7 @@ export function login(data) {
 // 用户信息
 export function getInfo(token) {
   return request({
-    url: '/ses-oauth/oauth/user/info',
+    url: '/pika-auth/auth/token/user/info',
     method: 'get'
   })
 }
@@ -26,7 +26,7 @@ export function getInfo(token) {
 // 退出登录
 export function logout() {
   return request({
-    url: '/ses-oauth/oauth/logout',
+    url: '/pika-auth/auth/token/logout',
     method: 'get'
   })
 }

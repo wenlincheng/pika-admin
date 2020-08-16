@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function queryResource(data) {
   return request({
-    url: '/ses-user/resource/list',
+    url: '/pika-upms/resource/list',
     method: 'get',
     params: data
   })
@@ -10,21 +10,21 @@ export function queryResource(data) {
 
 export function getResource(id) {
   return request({
-    url: '/ses-user/resource/' + { id },
+    url: '/pika-upms/resource/' + { id },
     method: 'get'
   })
 }
 
 export function queryAllResource() {
   return request({
-    url: '/ses-user/resource/all',
+    url: '/pika-upms/resource/all',
     method: 'get'
   })
 }
 
 export function createResource(data) {
   return request({
-    url: '/ses-user/resource',
+    url: '/pika-upms/resource',
     method: 'post',
     data
   })
@@ -32,7 +32,7 @@ export function createResource(data) {
 
 export function updateResource(data) {
   return request({
-    url: '/ses-user/resource/' + data.id,
+    url: '/pika-upms/resource/' + data.id,
     method: 'put',
     data
   })
@@ -40,7 +40,7 @@ export function updateResource(data) {
 
 export function deleteResource(id) {
   return request({
-    url: '/ses-user/resource/' + id,
+    url: '/pika-upms/resource/' + id,
     method: 'delete'
   })
 }

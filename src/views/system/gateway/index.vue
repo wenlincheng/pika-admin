@@ -99,25 +99,13 @@
 
       <el-table-column width="160px" align="center" label="修改时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.updatedTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="85" align="center" label="修改人">
-        <template slot-scope="scope">
-          <span>{{ scope.row.updatedBy }}</span>
+          <span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="160px" align="center" label="创建时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="85" align="center" label="创建人">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createdBy }}</span>
+          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
 

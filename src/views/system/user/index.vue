@@ -63,19 +63,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="用户名">
+      <el-table-column width="120px" align="center" label="用户名">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="头像">
+      <el-table-column width="100px" align="center" label="头像">
         <template slot-scope="scope">
           <img :src="scope.row.avatar" alt="" style="width: 50px;height: 50px">
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="姓名">
+      <el-table-column width="120px" align="center" label="姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -95,7 +95,7 @@
 
       <el-table-column class-name="status-col" label="角色">
         <template slot-scope="scope">
-          <el-tag style="margin: 2px;" v-for="item in scope.row.roleNames" type="info">{{ item }}</el-tag>
+          <el-tag v-for="item in scope.row.roleNames" style="margin: 2px;" type="info">{{ item }}</el-tag>
         </template>
       </el-table-column>
 

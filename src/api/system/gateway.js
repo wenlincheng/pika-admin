@@ -3,16 +3,16 @@ import request from '@/utils/request'
 export function queryGateway(data) {
   data.orders = data.order
   return request({
-    url: '/gateway-admin/gateway/routes/conditions',
-    method: 'post',
-    data
+    url: 'pika-gateway-admin/gateway/route/list',
+    method: 'get',
+    params: data
   })
 }
 
 export function addGateway(data) {
   data.orders = data.order
   return request({
-    url: '/gateway-admin/gateway/routes',
+    url: 'pika-gateway-admin/gateway/route',
     method: 'post',
     data
   })
@@ -20,7 +20,7 @@ export function addGateway(data) {
 
 export function deleteGateway(id) {
   return request({
-    url: '/gateway-admin/gateway/routes/' + id,
+    url: 'pika-gateway-admin/gateway/route/' + id,
     method: 'delete'
   })
 }
@@ -28,7 +28,7 @@ export function deleteGateway(id) {
 export function updateGateway(data) {
   data.orders = data.order
   return request({
-    url: '/gateway-admin/gateway/routes/' + data.id,
+    url: 'pika-gateway-admin/gateway/route/' + data.id,
     method: 'put',
     data
   })
@@ -36,7 +36,7 @@ export function updateGateway(data) {
 
 export function refreshGateway() {
   return request({
-    url: '/gateway-admin/gateway/routes/overload',
+    url: 'pika-gateway-admin/gateway/route/overload',
     method: 'post'
   })
 }

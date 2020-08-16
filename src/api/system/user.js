@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 列表
 export function queryUser(data) {
   return request({
-    url: '/ses-user/user/list',
+    url: '/pika-upms/user/list',
     method: 'get',
     params: data
   })
@@ -12,7 +12,7 @@ export function queryUser(data) {
 // 详情
 export function getUser(id) {
   return request({
-    url: '/ses-user/user/' + id,
+    url: '/pika-upms/user/' + id,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getUser(id) {
 // 创建
 export function createUser(data) {
   return request({
-    url: '/ses-user/user',
+    url: '/pika-upms/user',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function createUser(data) {
 // 修改
 export function updateUser(data) {
   return request({
-    url: '/ses-user/user/' + data.id,
+    url: '/pika-upms/user/' + data.id,
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateUser(data) {
 // 删除
 export function deleteUser(id) {
   return request({
-    url: '/ses-user/user/' + id,
+    url: '/pika-upms/user/' + id,
     method: 'delete'
   })
 }
