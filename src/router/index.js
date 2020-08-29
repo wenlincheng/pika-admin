@@ -14,6 +14,8 @@ import contentRouter from './modules/content'
 import devopsRouter from './modules/deops'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
+import marketingRouter from './modules/marketing'
+import memberRouter from './modules/member'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -95,8 +97,8 @@ export const constantRoutes = [
       {
         path: 'index',
         component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        name: '个人中心',
+        meta: { title: '个人中心', icon: 'user', noCache: true }
       }
     ]
   }
@@ -110,20 +112,11 @@ export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
   productRouter,
   orderRouter,
+  marketingRouter,
+  memberRouter,
   contentRouter,
-  devopsRouter,
   nestedRouter,
   tableRouter,
-  {
-    path: '/github',
-    component: Layout,
-    children: [
-      {
-        path: 'https://github.com/zhoutaoo/springcloud.git',
-        meta: { title: 'Github地址', icon: 'link' }
-      }
-    ]
-  },
   {
     path: '/icon',
     component: Layout,
@@ -136,6 +129,7 @@ export const asyncRoutes = [
       }
     ]
   },
+  devopsRouter,
   systemRouter,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
