@@ -37,7 +37,7 @@
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column type="index" width="50" align="center" label="序列" />
-      <el-table-column width="180px" align="left" label="路由id">
+      <el-table-column width="180px" align="left" label="路由ID">
         <template slot-scope="scope">
           <span>{{ scope.row.routeId }}</span>
         </template>
@@ -49,7 +49,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="220px" align="left" label="predicates">
+      <el-table-column width="220px" align="left" label="路由规则配置">
         <template slot-scope="scope">
           <span>
             <li v-for="(predicates, index) in scope.row.predicates" :key="index">
@@ -64,7 +64,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="130px" align="left" label="filters">
+      <el-table-column width="130px" align="left" label="过滤配置">
         <template slot-scope="scope">
           <span>
             <li v-for="(filters,index) in scope.row.filters" :key="index">
@@ -81,7 +81,7 @@
 
       <el-table-column width="50" align="center" label="排序">
         <template slot-scope="scope">
-          <span>{{ scope.row.orders }}</span>
+          <span>{{ scope.row.seq }}</span>
         </template>
       </el-table-column>
 
@@ -195,7 +195,7 @@
         </el-form-item>
 
         <el-form-item label="排序" prop="order">
-          <el-input v-model="temp.orders" type="number" placeholder="请输入优先级" />
+          <el-input v-model="temp.seq" type="number" placeholder="请输入优先级" />
         </el-form-item>
 
         <el-form-item label="描述" prop="description">
