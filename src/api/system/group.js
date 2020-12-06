@@ -1,6 +1,10 @@
 import request from '@/utils/request'
 
 export function fetchGroupByParentId(id) {
+  if (id === 'undefined') {
+    id = 0
+  }
+
   return request({
     url: '/pika-upms/group/parent/' + id,
     method: 'get'

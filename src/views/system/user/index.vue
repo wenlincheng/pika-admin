@@ -148,31 +148,31 @@
       <el-form
         ref="dataForm"
         :rules="rules"
-        :model="temp"
+        :model="dataForm"
         label-position="right"
         label-width="120px"
         status-icon
         style="width: 80%; margin-left:60px;"
       >
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="temp.username" placeholder="请输入用户名" />
+          <el-input v-model="dataForm.username" placeholder="请输入用户名" />
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="temp.mobile" placeholder="请输入用户手机号" />
+          <el-input v-model="dataForm.mobile" placeholder="请输入用户手机号" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input
-            v-model="temp.password"
+            v-model="dataForm.password"
             :disabled="dialogStatus==='edit'"
             placeholder="请输入用户密码"
           />
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="temp.name" placeholder="请输入用户姓名" />
+          <el-input v-model="dataForm.name" placeholder="请输入用户姓名" />
         </el-form-item>
         <el-form-item label="角色" prop="roles">
           <el-select
-            v-model="temp.roleIds"
+            v-model="dataForm.roleIds"
             multiple
             clearable
             style="width: 100%;"
@@ -190,7 +190,7 @@
 
         <el-form-item label="用户详情" prop="description">
           <el-input
-            v-model="temp.description"
+            v-model="dataForm.description"
             :rows="5"
             type="textarea"
             placeholder="请输入用户简介"
@@ -246,7 +246,7 @@ export default {
   },
   data() {
     return {
-      list: null,
+      list: [],
       total: 0,
       listLoading: true,
       downloadLoading: false,
@@ -275,7 +275,7 @@ export default {
         ]
       },
       // 创建或修改用户临时对象
-      temp: {}
+      dataForm: {}
     }
   },
   // 页面加载完成后显示列表页
@@ -336,7 +336,7 @@ export default {
        * 重置添加表单
        */
     resetForm() {
-      this.temp = {
+      this.dataForm = {
         username: '',
         avatar: '',
         status: 0,
@@ -364,7 +364,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createUser(this.temp).then(() => {
+          createUser(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '创建成功',
@@ -372,7 +372,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.temp.roleIds = []
+            this.dataForm.roleIds = []
             this.queryUser()
           })
         }
@@ -384,7 +384,7 @@ export default {
     handleUpdate(id) {
       this.listLoading = true
       getUser(id).then(response => {
-        this.temp = response.data
+        this.dataForm = response.data
         this.getRoles(1)
         this.listLoading = false
         this.dialogStatus = 'edit'
@@ -400,7 +400,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateUser(this.temp).then(() => {
+          updateUser(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '编辑成功',
@@ -408,7 +408,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.temp.roleIds = []
+            this.dataForm.roleIds = []
             this.queryUser()
           })
         }

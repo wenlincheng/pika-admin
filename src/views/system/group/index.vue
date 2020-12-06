@@ -86,8 +86,8 @@ export default {
       },
       labelPosition: 'right',
       form: {
-        parentId: undefined,
-        id: undefined,
+        parentId: 0,
+        id: 0,
         name: '',
         description: '',
         createdTime: '',
@@ -98,7 +98,7 @@ export default {
     }
   },
   created() {
-    this.fetchGroupByParentId('-1')
+    this.fetchGroupByParentId(0)
   },
   methods: {
     /**

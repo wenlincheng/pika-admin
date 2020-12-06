@@ -38,7 +38,7 @@
         style="margin-left: 10px;"
         type="primary"
         icon="el-icon-edit"
-        @click="handleCreate"
+        @click="addOrUpdateHandle()"
       >
         新增
       </el-button>
@@ -105,11 +105,8 @@
 
       <el-table-column align="center" label="操作" width="220">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">
+          <el-button type="primary" size="mini" @click="addOrUpdateHandle(scope.row.id)">
             修改
-          </el-button>
-          <el-button type="primary" size="mini" @click="handleAuth(scope.row.id)">
-            授权
           </el-button>
           <el-button type="danger" size="mini" @click="deleteRole(scope.row.id)">
             删除
@@ -137,20 +134,20 @@
       <el-form
         ref="dataForm"
         :rules="rules"
-        :model="temp"
+        :model="dataForm"
         label-position="right"
         label-width="120px"
         status-icon
         style="width: 80%; margin-left:30px;"
       >
         <el-form-item label="角色代码" prop="code">
-          <el-input v-model="temp.code" placeholder="请输入角色代码" />
+          <el-input v-model="dataForm.code" placeholder="请输入角色代码" />
         </el-form-item>
-        <el-form-item label="角色名" prop="name">
-          <el-input v-model="temp.name" placeholder="请输入角色名" />
+        <el-form-item label="角色名称" prop="name">
+          <el-input v-model="dataForm.name" placeholder="请输入角色名称" />
         </el-form-item>
-        <el-form-item label="角色描述" prop="description">
-          <el-input v-model="temp.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
+        <el-form-item label="描述" prop="description">
+          <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
         </el-form-item>
       </el-form>
       <!--对话框动作按钮-->
@@ -165,14 +162,14 @@
     <el-dialog title="授权" :visible.sync="authFormVisible">
       <el-form
         ref="dataForm"
-        :model="temp"
+        :model="dataForm"
         label-position="right"
         label-width="120px"
         style="width: 90%; margin-left:40px;"
       >
         <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;" />
-        <el-checkbox-group v-model="temp.resourceIds" @change="handleCheckedChange">
+        <el-checkbox-group v-model="dataForm.resourceIds" @change="handleCheckedChange">
           <span v-for="(resource) in resources">
             <el-checkbox :key="resource.id" :label="resource.id" style="height: 15px;margin: 10px">
               {{ resource.name }}
@@ -186,13 +183,20 @@
         <el-button type="primary" @click="updateAuth">保存</el-button>
       </div>
     </el-dialog>
+    <!-- 弹窗, 新增 / 修改 -->
+    <add-or-update
+      v-if="addOrUpdateVisible"
+      ref="addOrUpdate"
+      @refreshDataList="getDataList"
+    />
   </div>
 </template>
 
 <script>
+import AddOrUpdate from './form'
 import { queryRole, createRole, updateRole, deleteRole, getRole } from '@/api/system/role'
 import { queryAllResource } from '@/api/system/resource'
-import waves from '@/directive/waves' // 水波纹指令
+import waves from '@/directive/waves'
 
 export default {
   name: 'RoleManagement',
@@ -214,6 +218,9 @@ export default {
       }
       return statusMap[status]
     }
+  },
+  components: {
+    AddOrUpdate
   },
   data() {
     return {
@@ -238,23 +245,25 @@ export default {
       checkAll: false,
       resources: [],
       isIndeterminate: true,
-      temp: {
+      dataForm: {
         code: '',
         name: '',
         description: '',
         resourceIds: []
       },
-      downloadLoading: false
+      downloadLoading: false,
+      addOrUpdateVisible: false,
+      menuList: []
     }
   },
   created() {
-    this.queryRole()
+    this.getDataList()
   },
   methods: {
     /**
        * 查询列表
        */
-    queryRole() {
+    getDataList() {
       this.listLoading = true
       queryRole(this.listQuery).then(response => {
         this.list = response.data.records
@@ -264,7 +273,7 @@ export default {
     },
     handleFilter() {
       this.listQuery.current = 1
-      this.queryRole()
+      this.getDataList()
     },
     // 重置搜索条件
     handleRefresh() {
@@ -272,28 +281,35 @@ export default {
         current: 1,
         size: 10
       }
-      this.queryRole()
+      this.getDataList()
     },
     /**
        * 修改每页显示条数
        */
     handleSizeChange(val) {
       this.listQuery.size = val
-      this.queryRole()
+      this.getDataList()
     },
     /**
        * 跳转到指定页
        */
     handleCurrentChange(val) {
       this.listQuery.current = val
-      this.queryRole()
+      this.getDataList()
+    },
+    // 新增 / 修改
+    addOrUpdateHandle(id) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.init(id)
+      })
     },
 
     /**
        * 弹出新增角色对话框
        */
     handleCreate() {
-      this.temp = {}
+      this.dataForm = {}
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -306,7 +322,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createRole(this.temp).then(() => {
+          createRole(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '创建成功',
@@ -314,7 +330,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.queryRole()
+            this.getDataList()
           })
         }
       })
@@ -323,8 +339,8 @@ export default {
        * 点击授权按钮
        */
     handleAuth(id) {
-      this.temp.id = id
-      this.temp.resourceIds = []
+      this.dataForm.id = id
+      this.dataForm.resourceIds = []
       // 查询所有资源
       queryAllResource().then(response => {
         this.resources = response.data
@@ -332,8 +348,8 @@ export default {
       })
       // 查询角色详细信息，拿到已授权的角色id
       getRole(id).then(response => {
-        this.temp.resourceIds = response.data.resourceIds
-        this.handleCheckedChange(this.temp.resourceIds)
+        this.dataForm.resourceIds = response.data.resourceIds
+        this.handleCheckedChange(this.dataForm.resourceIds)
       })
     },
     /**
@@ -344,7 +360,7 @@ export default {
       for (let i = 0; i < this.resources.length; i++) {
         ids.push(this.resources[i].id)
       }
-      this.temp.resourceIds = val ? ids : []
+      this.dataForm.resourceIds = val ? ids : []
       this.isIndeterminate = false
     },
     /**
@@ -360,8 +376,8 @@ export default {
        */
     updateAuth() {
       const temp = {
-        id: this.temp.id,
-        resourceIds: this.temp.resourceIds
+        id: this.dataForm.id,
+        resourceIds: this.dataForm.resourceIds
       }
       console.log(temp)
       updateRole(temp).then(() => {
@@ -378,7 +394,7 @@ export default {
        * 点击更新按钮
        */
     handleUpdate(row) {
-      this.temp = Object.assign({}, row)// copy obj
+      this.dataForm = Object.assign({}, row)// copy obj
       this.dialogStatus = 'edit'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -391,7 +407,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateRole(this.temp).then(() => {
+          updateRole(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '编辑成功',
@@ -399,7 +415,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.queryRole()
+            this.getDataList()
           })
         }
       })
@@ -421,7 +437,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.queryRole()
+          this.getDataList()
         })
       })
     },

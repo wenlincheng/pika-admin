@@ -18,15 +18,6 @@ const contentRouter = {
         title: '素材管理',
         icon: 'peoples'
       }
-    },
-    {
-      path: '/content-center/material',
-      component: () => import('@/views/content-center/material'),
-      name: 'Material',
-      meta: {
-        title: '素材管理',
-        icon: 'peoples'
-      }
     }
   ]
 }
