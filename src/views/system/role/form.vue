@@ -15,6 +15,7 @@
         <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
       </el-form-item>
       <el-form-item size="mini" label="授权">
+        <el-checkbox ref="allCheck" v-model="checked" @change="allChecked">全选</el-checkbox>
         <el-tree
           ref="menuListTree"
           :data="menuList"
@@ -39,6 +40,7 @@ import { queryAllMenu } from '@/api/system/menu'
 export default {
   data() {
     return {
+      checked: false,
       visible: false,
       menuList: [],
       menuListTreeProps: {
@@ -78,12 +80,13 @@ export default {
             this.dataForm.code = data.code
             this.dataForm.name = data.name
             this.dataForm.description = data.description
-            const idx = data.menuIdList.indexOf(this.tempKey)
-            if (idx !== -1) {
-              data.menuIdList.splice(idx, data.menuIdList.length - idx)
-            }
             console.log(data.menuIdList)
-            this.$refs.menuListTree.setCheckedKeys(data.menuIdList)
+            this.$nextTick(() => {
+              data.menuIdList.forEach(menuId => {
+                this.$refs.menuListTree.setChecked(menuId, true, false)
+              })
+              this.checked = false
+            })
           })
         }
       })
@@ -92,6 +95,7 @@ export default {
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.dataForm.menuIdList = this.$refs.menuListTree.getCheckedKeys().concat(this.$refs.menuListTree.getHalfCheckedKeys())
           if (this.dataForm.id) {
             updateRole(this.dataForm).then(({ data }) => {
               this.$message({
@@ -117,9 +121,15 @@ export default {
               })
             })
           }
-          // 'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), [this.tempKey], this.$refs.menuListTree.getHalfCheckedKeys())
         }
       })
+    },
+    allChecked() {
+      if (this.checked) { // 全选
+        this.$refs.menuListTree.setCheckedNodes(this.menuList)
+      } else { // 取消选中
+        this.$refs.menuListTree.setCheckedKeys([])
+      }
     }
   }
 }

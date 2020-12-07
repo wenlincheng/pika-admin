@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 列表
 export function queryUser(data) {
   return request({
-    url: '/pika-upms/user/list',
+    url: '/pika-upms/user/page',
     method: 'get',
     params: data
   })
@@ -29,7 +29,7 @@ export function createUser(data) {
 // 修改
 export function updateUser(data) {
   return request({
-    url: '/pika-upms/user/' + data.id,
+    url: '/pika-upms/user/',
     method: 'put',
     data: data
   })

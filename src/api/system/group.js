@@ -28,7 +28,7 @@ export function createGroup(data) {
 
 export function updateGroup(data) {
   return request({
-    url: '/pika-upms/group/' + data.id,
+    url: '/pika-upms/group/',
     method: 'put',
     data
   })

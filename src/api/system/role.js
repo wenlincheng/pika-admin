@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function queryRole(data) {
   return request({
-    url: '/pika-upms/role/list',
+    url: '/pika-upms/role/page',
     method: 'get',
     params: data
   })
@@ -32,7 +32,7 @@ export function createRole(data) {
 
 export function updateRole(data) {
   return request({
-    url: '/pika-upms/role/' + data.id,
+    url: '/pika-upms/role/',
     method: 'put',
     data
   })
