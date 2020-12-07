@@ -99,6 +99,7 @@ export default {
                 }
               })
               this.checked = false
+              this.filterText = ''
             })
           })
         }
