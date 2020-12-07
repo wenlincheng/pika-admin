@@ -15,11 +15,16 @@
         <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
       </el-form-item>
       <el-form-item size="mini" label="授权">
+        <el-input
+          placeholder="输入关键字进行过滤"
+          v-model="filterText">
+        </el-input>
         <el-checkbox ref="allCheck" v-model="checked" @change="allChecked">全选</el-checkbox>
         <el-tree
           ref="menuListTree"
           :data="menuList"
           :props="menuListTreeProps"
+          :filter-node-method="filterNode"
           node-key="id"
           show-checkbox
         />
@@ -42,6 +47,7 @@ export default {
     return {
       checked: false,
       visible: false,
+      filterText: '',
       menuList: [],
       menuListTreeProps: {
         label: 'name',
@@ -60,6 +66,11 @@ export default {
         ]
       },
       tempKey: -666666 // 临时key, 用于解决tree半选中状态项不能传给后台接口问题. # 待优化
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.menuListTree.filter(val)
     }
   },
   methods: {
@@ -132,6 +143,10 @@ export default {
       } else { // 取消选中
         this.$refs.menuListTree.setCheckedKeys([])
       }
+    },
+    filterNode(value, data) {
+      if (!value) return true
+      return data.name.indexOf(value) !== -1
     }
   }
 }
