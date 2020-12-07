@@ -80,10 +80,12 @@ export default {
             this.dataForm.code = data.code
             this.dataForm.name = data.name
             this.dataForm.description = data.description
-            console.log(data.menuIdList)
             this.$nextTick(() => {
               data.menuIdList.forEach(menuId => {
-                this.$refs.menuListTree.setChecked(menuId, true, false)
+                const node = this.$refs.menuListTree.getNode(menuId)
+                if (node.isLeaf) {
+                  this.$refs.menuListTree.setChecked(node, true, false)
+                }
               })
               this.checked = false
             })

@@ -375,7 +375,6 @@ export function treeDataTranslate(data, id = 'id', pid = 'parentId') {
       res.push(data[k])
     }
   }
-  console.log(res)
   return res
 }
 
@@ -386,10 +385,8 @@ export function treeDataTranslate(data, id = 'id', pid = 'parentId') {
  * @param {*} pid
  */
 export function idList(data, val, id = 'id', children = 'children') {
-  console.log(data)
   const res = []
   idListFromTree(data, val, res, id)
-  console.log(res)
   return res
 }
 
