@@ -20,8 +20,8 @@
           :options="menuList"
           :props="menuListTreeProps"
           change-on-select
-          @change="handleSelectMenuChange"
           clearable
+          @change="handleSelectMenuChange"
         />
       </el-form-item>
       <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
