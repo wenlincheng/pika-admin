@@ -50,11 +50,19 @@ service.interceptors.response.use(
     // HTTP Status
     if (response.status !== 200) {
       console.log(res)
-      Message({
-        message: res.msg || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
+      if (res.code === 401) {
+        Message({
+          message: '无权限访问',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      } else {
+        Message({
+          message: res.msg || '系统错误',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
       return Promise.reject(new Error(res.msg || 'Error'))
     } else {
       // 判断自定义的错误码

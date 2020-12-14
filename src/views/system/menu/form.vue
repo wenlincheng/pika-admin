@@ -27,7 +27,10 @@
       <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
         <el-input v-model="dataForm.url" placeholder="菜单路由" />
       </el-form-item>
-      <el-form-item v-if="dataForm.type === 1" label="请求方法" prop="method">
+      <el-form-item v-if="dataForm.type === 2" label="请求链接" prop="url">
+        <el-input v-model="dataForm.url" placeholder="请求链接" />
+      </el-form-item>
+      <el-form-item v-if="dataForm.type === 2" label="请求方法" prop="method">
         <el-input v-model="dataForm.method" placeholder="请求方法" />
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
