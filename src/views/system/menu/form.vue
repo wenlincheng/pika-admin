@@ -24,8 +24,11 @@
           clearable
         />
       </el-form-item>
-      <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="href">
-        <el-input v-model="dataForm.href" placeholder="菜单路由" />
+      <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
+        <el-input v-model="dataForm.url" placeholder="菜单路由" />
+      </el-form-item>
+      <el-form-item v-if="dataForm.type === 1" label="请求方法" prop="method">
+        <el-input v-model="dataForm.method" placeholder="请求方法" />
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
         <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create" />
@@ -91,7 +94,8 @@ export default {
         type: 1,
         name: '',
         parentId: 0,
-        href: '',
+        url: '',
+        method: '',
         perms: '',
         sequence: 0,
         icon: ''
@@ -102,7 +106,7 @@ export default {
         name: [
           { required: true, message: '菜单名称不能为空', trigger: 'blur' }
         ],
-        href: [
+        url: [
           { validator: validateUrl, trigger: 'blur' }
         ]
       },
@@ -137,7 +141,8 @@ export default {
             this.dataForm.type = data.type
             this.dataForm.name = data.name
             this.dataForm.parentId = data.parentId
-            this.dataForm.href = data.href
+            this.dataForm.url = data.url
+            this.dataForm.method = data.method
             this.dataForm.perms = data.perms
             this.dataForm.sequence = data.sequence
             this.dataForm.icon = data.icon
