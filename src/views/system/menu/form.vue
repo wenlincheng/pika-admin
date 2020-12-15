@@ -24,17 +24,24 @@
           @change="handleSelectMenuChange"
         />
       </el-form-item>
-      <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
-        <el-input v-model="dataForm.url" placeholder="菜单路由" />
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === 2" label="请求链接" prop="url">
-        <el-input v-model="dataForm.url" placeholder="请求链接" />
+      <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="uri">
+        <el-input v-model="dataForm.uri" placeholder="菜单路由" />
       </el-form-item>
       <el-form-item v-if="dataForm.type === 2" label="请求方法" prop="method">
-        <el-input v-model="dataForm.method" placeholder="请求方法" />
+        <el-select v-model="dataForm.method" clearable placeholder="请选择">
+          <el-option
+            v-for="item in methods"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
-        <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create" />
+      <el-form-item v-if="dataForm.type === 2" label="URI" prop="uri">
+        <el-input v-model="dataForm.uri" placeholder="与请求方法组成唯一键 如: /user/list, /user/{id}" />
+      </el-form-item>
+      <el-form-item v-if="dataForm.type === 2" label="授权标识" prop="code">
+        <el-input v-model="dataForm.code" placeholder="与请求方法组成唯一键 如: sys:user:list" />
       </el-form-item>
       <el-form-item label="排序号" prop="sequence">
         <el-input-number v-model="dataForm.sequence" controls-position="right" :min="0" label="排序号" />
@@ -63,7 +70,7 @@
           </el-col>
           <el-col :span="2" class="icon-list__tips">
             <el-tooltip placement="top" effect="light">
-              <div slot="content">全站推荐使用SVG Sprite, 详细请参考:icons/index.js 描述</div>
+              <div slot="content">更多图标请参考 https://www.iconfont.cn/</div>
               <i class="el-icon-warning" />
             </el-tooltip>
           </el-col>
@@ -83,9 +90,13 @@ import Icon from '@/icons'
 import { queryAllMenu, getMenu, createMenu, updateMenu } from '@/api/system/menu'
 export default {
   data() {
-    const validateUrl = (rule, value, callback) => {
-      if (this.dataForm.type === 1 && !/\S/.test(value)) {
-        callback(new Error('菜单URL不能为空'))
+    const validateUri = (rule, value, callback) => {
+      if ((this.dataForm.type === 1 || this.dataForm.type === 2) && !/\S/.test(value)) {
+        if (this.dataForm.type === 1) {
+          callback(new Error('菜单路由不能为空'))
+        } else {
+          callback(new Error('URI不能为空'))
+        }
       } else {
         callback()
       }
@@ -97,9 +108,9 @@ export default {
         type: 1,
         name: '',
         parentId: 0,
-        url: '',
+        uri: '',
         method: '',
-        perms: '',
+        code: '',
         sequence: 0,
         icon: ''
       },
@@ -107,12 +118,31 @@ export default {
       iconList: {},
       dataRule: {
         name: [
-          { required: true, message: '菜单名称不能为空', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' }
         ],
-        url: [
-          { validator: validateUrl, trigger: 'blur' }
+        method: [
+          { required: true, message: '请求方法不能为空', trigger: 'blur' }
+        ],
+        uri: [
+          { required: true, validator: validateUri, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '授权标识不能为空', trigger: 'blur' }
         ]
       },
+      methods: [{
+        value: 'GET',
+        label: 'GET'
+      }, {
+        value: 'POST',
+        label: 'POST'
+      }, {
+        value: 'PUT',
+        label: 'PUT'
+      }, {
+        value: 'DELETE',
+        label: 'DELETE'
+      }],
       menuList: [],
       selectedMenu: [],
       menuListTreeProps: {
@@ -144,9 +174,9 @@ export default {
             this.dataForm.type = data.type
             this.dataForm.name = data.name
             this.dataForm.parentId = data.parentId
-            this.dataForm.url = data.url
+            this.dataForm.uri = data.uri
             this.dataForm.method = data.method
-            this.dataForm.perms = data.perms
+            this.dataForm.code = data.code
             this.dataForm.sequence = data.sequence
             this.dataForm.icon = data.icon
             this.selectedMenu = idList(this.menuList, data.parentId, 'id', 'children').reverse()

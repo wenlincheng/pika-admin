@@ -77,26 +77,34 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="sequence"
-        header-align="center"
-        align="center"
-        label="排序号"
-      />
-      <el-table-column
-        prop="url"
+        prop="uri"
         header-align="center"
         align="center"
         width="150"
         :show-overflow-tooltip="true"
-        label="菜单URL"
+        label="URI"
       />
       <el-table-column
-        prop="perms"
+        prop="method"
+        header-align="center"
+        align="center"
+        width="150"
+        :show-overflow-tooltip="true"
+        label="请求方法"
+      />
+      <el-table-column
+        prop="code"
         header-align="center"
         align="center"
         width="150"
         :show-overflow-tooltip="true"
         label="授权标识"
+      />
+      <el-table-column
+        prop="sequence"
+        header-align="center"
+        align="center"
+        label="排序号"
       />
       <el-table-column width="160px" align="center" label="修改时间">
         <template slot-scope="scope">
@@ -187,19 +195,8 @@ export default {
       dialogStatus: 'create',
       dialogFormVisible: false,
       authFormVisible: false,
-      rules: {
-        code: [{ required: true, message: '角色代码必填', trigger: 'blur' }],
-        name: [{ required: true, message: '角色名必填', trigger: 'blur' }]
-      },
       checkAll: false,
-      resources: [],
       isIndeterminate: true,
-      temp: {
-        code: '',
-        name: '',
-        description: '',
-        resourceIds: []
-      },
       downloadLoading: false
     }
   },

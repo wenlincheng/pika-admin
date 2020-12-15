@@ -34,7 +34,7 @@ export function createMenu(data) {
 
 export function updateMenu(data) {
   return request({
-    url: '/pika-upms/menu/',
+    url: '/pika-upms/menu',
     method: 'put',
     data
   })
