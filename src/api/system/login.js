@@ -18,7 +18,7 @@ export function login(data) {
 // 用户信息
 export function getUserInfo() {
   return request({
-    url: '/pika-auth/auth/token/user/info',
+    url: '/pika-upms/user/info',
     method: 'get'
   })
 }

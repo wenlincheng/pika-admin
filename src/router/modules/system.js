@@ -30,7 +30,8 @@ const systemRouter = {
       name: 'Role',
       meta: {
         title: '角色管理',
-        icon: 'role'
+        icon: 'role',
+        roles: ['admin', 'editor']
       }
     },
     {
@@ -39,7 +40,8 @@ const systemRouter = {
       name: 'Menu',
       meta: {
         title: '菜单管理',
-        icon: 'table'
+        icon: 'table',
+        roles: ['admin', 'editor']
       }
     },
     {

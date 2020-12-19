@@ -60,7 +60,7 @@ const actions = {
         // if (!roleIds || roleIds.length <= 0) {
         //   reject('getInfo: roles must be a non-null array!')
         // }
-        commit('SET_ROLES', ['0'])
+        commit('SET_ROLES', ['admin'])
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', description)
