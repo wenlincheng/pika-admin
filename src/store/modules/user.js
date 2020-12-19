@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getUserInfo } from '@/api/system/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -33,6 +33,7 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
+      // 登录
       login({ username: username.trim(), password: password }).then(response => {
         commit('SET_TOKEN', response.data.accessToken)
         setToken(response.data.accessToken)
@@ -47,27 +48,24 @@ const actions = {
   // 获取用户信息并存储
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      // 查询用户信息
+      getUserInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           reject('权限不足,无法访问')
         }
+        const { name, avatar, description, roles } = data
 
-        const { name, avatar, description } = data
-
-        // roles must be a non-empty array
+        // 角色必须是非空数组
         // if (!roleIds || roleIds.length <= 0) {
         //   reject('getInfo: roles must be a non-null array!')
         // }
-
-        commit('SET_ROLES', ['admin'])
+        commit('SET_ROLES', ['0'])
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', description)
         data.roles = ['admin']
         resolve(data)
-        console.log(data)
       }).catch(error => {
         reject(error)
       })
@@ -89,7 +87,7 @@ const actions = {
     })
   },
 
-  // remove token
+  // 删除 token
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
@@ -99,7 +97,7 @@ const actions = {
     })
   },
 
-  // dynamically modify permissions
+  // 动态修改权限
   changeRoles({ commit, dispatch }, role) {
     return new Promise(async resolve => {
       const token = role + '-token'
@@ -111,13 +109,13 @@ const actions = {
 
       resetRouter()
 
-      // generate accessible routes map based on roles
+      // 根据角色生成可访问的路由
       const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
 
-      // dynamically add accessible routes
+      // 动态添加可访问的路由
       router.addRoutes(accessRoutes)
 
-      // reset visited views and cached views
+      // 重置访问的视图和缓存的视图
       dispatch('tagsView/delAllViews', null, { root: true })
 
       resolve()

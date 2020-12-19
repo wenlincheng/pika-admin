@@ -17,7 +17,7 @@ export function getRole(id) {
 
 export function getAllRoles() {
   return request({
-    url: '/pika-upms/role/all/1',
+    url: '/pika-upms/role/list',
     method: 'get'
   })
 }
@@ -32,7 +32,7 @@ export function createRole(data) {
 
 export function updateRole(data) {
   return request({
-    url: '/pika-upms/role/',
+    url: '/pika-upms/role',
     method: 'put',
     data
   })

@@ -125,14 +125,14 @@
       >
         <template slot-scope="scope">
           <el-button
-            type="text"
-            size="small"
+            type="primary"
+            size="mini"
             @click="addOrUpdateHandle(scope.row.id)"
           >修改
           </el-button>
           <el-button
-            type="text"
-            size="small"
+            type="danger"
+            size="mini"
             @click="deleteHandle(scope.row.id)"
           >删除
           </el-button>

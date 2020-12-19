@@ -9,7 +9,7 @@ export function queryUser(data) {
   })
 }
 
-// 详情
+// 查看
 export function getUser(id) {
   return request({
     url: '/pika-upms/user/' + id,
@@ -29,7 +29,7 @@ export function createUser(data) {
 // 修改
 export function updateUser(data) {
   return request({
-    url: '/pika-upms/user/',
+    url: '/pika-upms/user',
     method: 'put',
     data: data
   })

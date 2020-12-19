@@ -15,10 +15,10 @@
         <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
       </el-form-item>
       <el-form-item size="mini" label="授权">
-        <el-input
-          placeholder="输入关键字进行过滤"
-          v-model="filterText">
-        </el-input>
+<!--        <el-input-->
+<!--          placeholder="输入关键字进行过滤"-->
+<!--          v-model="filterText">-->
+<!--        </el-input>-->
         <el-checkbox ref="allCheck" v-model="checked" @change="allChecked">全选</el-checkbox>
         <el-tree
           ref="menuListTree"

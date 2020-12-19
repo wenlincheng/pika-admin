@@ -128,61 +128,6 @@
         @current-change="handleCurrentChange"
       />
     </div>
-
-    <!--添加或编辑对话框-->
-    <el-dialog title="新增/修改" :visible.sync="dialogFormVisible">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="dataForm"
-        label-position="right"
-        label-width="120px"
-        status-icon
-        style="width: 80%; margin-left:30px;"
-      >
-        <el-form-item label="角色代码" prop="code">
-          <el-input v-model="dataForm.code" placeholder="请输入角色代码" />
-        </el-form-item>
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model="dataForm.name" placeholder="请输入角色名称" />
-        </el-form-item>
-        <el-form-item label="描述" prop="description">
-          <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
-        </el-form-item>
-      </el-form>
-      <!--对话框动作按钮-->
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">创建</el-button>
-        <el-button v-else type="primary" @click="updateData">保存</el-button>
-      </div>
-    </el-dialog>
-
-    <!--授权页面-->
-    <el-dialog title="授权" :visible.sync="authFormVisible">
-      <el-form
-        ref="dataForm"
-        :model="dataForm"
-        label-position="right"
-        label-width="120px"
-        style="width: 90%; margin-left:40px;"
-      >
-        <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
-        <div style="margin: 15px 0;" />
-        <el-checkbox-group v-model="dataForm.resourceIds" @change="handleCheckedChange">
-          <span v-for="(resource) in resources">
-            <el-checkbox :key="resource.id" :label="resource.id" style="height: 15px;margin: 10px">
-              {{ resource.name }}
-            </el-checkbox>
-          </span>
-        </el-checkbox-group>
-      </el-form>
-      <!--对话框动作按钮-->
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="authFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="updateAuth">保存</el-button>
-      </div>
-    </el-dialog>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       v-if="addOrUpdateVisible"
@@ -194,8 +139,7 @@
 
 <script>
 import AddOrUpdate from './form'
-import { queryRole, createRole, updateRole, deleteRole, getRole } from '@/api/system/role'
-import { queryAllResource } from '@/api/system/resource'
+import { queryRole, createRole, updateRole, deleteRole } from '@/api/system/role'
 import waves from '@/directive/waves'
 
 export default {
@@ -322,72 +266,19 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createRole(this.dataForm).then(() => {
+          createRole(this.dataForm).then((res) => {
             this.dialogFormVisible = false
-            this.$notify({
-              title: '创建成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getDataList()
+            if (res === 200) {
+              this.$notify({
+                title: '创建成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.getDataList()
+            }
           })
         }
-      })
-    },
-    /**
-       * 点击授权按钮
-       */
-    handleAuth(id) {
-      this.dataForm.id = id
-      this.dataForm.resourceIds = []
-      // 查询所有资源
-      queryAllResource().then(response => {
-        this.resources = response.data
-        this.authFormVisible = true
-      })
-      // 查询角色详细信息，拿到已授权的角色id
-      getRole(id).then(response => {
-        this.dataForm.resourceIds = response.data.resourceIds
-        this.handleCheckedChange(this.dataForm.resourceIds)
-      })
-    },
-    /**
-       * 全选权限选项
-       */
-    handleCheckAllChange(val) {
-      const ids = []
-      for (let i = 0; i < this.resources.length; i++) {
-        ids.push(this.resources[i].id)
-      }
-      this.dataForm.resourceIds = val ? ids : []
-      this.isIndeterminate = false
-    },
-    /**
-       * 选中选项
-       */
-    handleCheckedChange(value) {
-      const checkedCount = value.length
-      this.checkAll = checkedCount === this.resources.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.resources.length
-    },
-    /**
-       * 更新权限
-       */
-    updateAuth() {
-      const temp = {
-        id: this.dataForm.id,
-        resourceIds: this.dataForm.resourceIds
-      }
-      console.log(temp)
-      updateRole(temp).then(() => {
-        this.authFormVisible = false
-        this.$notify({
-          title: '权限编辑成功',
-          message: '权限编辑成功',
-          type: 'success',
-          duration: 2000
-        })
       })
     },
     /**
@@ -407,15 +298,17 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateRole(this.dataForm).then(() => {
+          updateRole(this.dataForm).then((res) => {
             this.dialogFormVisible = false
-            this.$notify({
-              title: '编辑成功',
-              message: '编辑成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getDataList()
+            if (res === 200) {
+              this.$notify({
+                title: '编辑成功',
+                message: '编辑成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.getDataList()
+            }
           })
         }
       })
@@ -430,14 +323,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteRole(id).then(() => {
-          this.$notify({
-            title: '删除成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getDataList()
+        deleteRole(id).then((res) => {
+          if (res.code === 200) {
+            this.$notify({
+              title: '删除成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getDataList()
+          }
         })
       })
     },
