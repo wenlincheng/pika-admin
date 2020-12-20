@@ -1,4 +1,5 @@
 import { login, logout, getUserInfo } from '@/api/system/login'
+import { queryMenuRouter } from '@/api/system/menu'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -7,7 +8,8 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  routers: []
 }
 
 const mutations = {
@@ -25,6 +27,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ROUTERS: (state, routers) => {
+    state.routers = routers
   }
 }
 
@@ -60,18 +65,24 @@ const actions = {
         // if (!roleIds || roleIds.length <= 0) {
         //   reject('getInfo: roles must be a non-null array!')
         // }
-        commit('SET_ROLES', ['admin'])
+        commit('SET_ROLES', [101])
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', description)
-        data.roles = ['admin']
+        data.roles = [101]
         resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+      // 获取动态路由
+      queryMenuRouter().then(response => {
+        console.log(response)
+        commit('SET_ROUTERS', response.data)
       }).catch(error => {
         reject(error)
       })
     })
   },
-
   // 退出登录
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {

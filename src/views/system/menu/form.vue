@@ -24,7 +24,7 @@
           @change="handleSelectMenuChange"
         />
       </el-form-item>
-      <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="uri">
+      <el-form-item v-if="dataForm.type === 0 || dataForm.type === 1" label="菜单路由" prop="uri">
         <el-input v-model="dataForm.uri" placeholder="菜单路由" />
       </el-form-item>
       <el-form-item v-if="dataForm.type === 2" label="请求方法" prop="method">

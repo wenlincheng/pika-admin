@@ -47,3 +47,9 @@ export function deleteMenu(id) {
   })
 }
 
+export function queryMenuRouter() {
+  return request({
+    url: '/pika-upms/menu/router',
+    method: 'get'
+  })
+}

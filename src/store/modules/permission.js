@@ -1,4 +1,6 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
+import store from '@/store'
+import Layout from '@/layout'
 
 /**
  * 使用meta.role确定当前用户是否具有权限
@@ -34,6 +36,37 @@ export function filterAsyncRoutes(routes, roles) {
   return res
 }
 
+/**
+ * 把后台返回菜单组装成routes要求的格式
+ * @param {*} routes
+ */
+export function getAsyncRoutes(routes) {
+  const res = []
+  const keys = ['path', 'name', 'children', 'redirect', 'alwaysShow', 'meta', 'hidden']
+  routes.forEach(item => {
+    const newItem = {}
+    if (item.component) {
+      if (item.component === 'Layout') {
+        newItem.component = Layout
+      } else {
+        // newItem.component = () => import(`@/views` + item.component)
+        newItem.component = () => import('@/views/system/menu')
+        // newItem.component = () => import('@/views'.concat('/system/menu'))
+      }
+    }
+    for (const key in item) {
+      if (keys.includes(key)) {
+        newItem[key] = item[key]
+      }
+    }
+    if (newItem.children && newItem.children.length) {
+      newItem.children = getAsyncRoutes(item.children)
+    }
+    res.push(newItem)
+  })
+  return res
+}
+
 const state = {
   routes: [],
   addRoutes: []
@@ -49,12 +82,11 @@ const mutations = {
 const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-      }
-      accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      console.log(store.getters.routers)
+      console.log('===========')
+      const asyncRoutes = getAsyncRoutes(store.getters.routers)
+      console.log(asyncRoutes)
+      const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })

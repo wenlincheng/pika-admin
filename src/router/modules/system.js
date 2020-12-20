@@ -15,6 +15,30 @@ const systemRouter = {
   },
   children: [
     {
+      path: '/system',
+      component: Layout,
+      redirect: '/system/user',
+      alwaysShow: true,
+      name: 'Organization',
+      meta: {
+        title: '系统管理',
+        roles: ['admin', 'editor'],
+        icon: 'component'
+      },
+      children: [
+        {
+          path: '/system/user',
+          component: () => import('@/views/system/user'),
+          name: 'User',
+          meta: {
+            title: '用户管理',
+            icon: 'peoples',
+            roles: ['admin', 'editor']
+          }
+        }
+      ]
+    },
+    {
       path: '/system/user',
       component: () => import('@/views/system/user'),
       name: 'User',
