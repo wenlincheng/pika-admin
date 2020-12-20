@@ -59,24 +59,23 @@ const actions = {
         if (!data) {
           reject('权限不足,无法访问')
         }
-        const { name, avatar, description, roles } = data
+        const { name, avatar, description, roleIds } = data
 
         // 角色必须是非空数组
-        // if (!roleIds || roleIds.length <= 0) {
-        //   reject('getInfo: roles must be a non-null array!')
-        // }
-        commit('SET_ROLES', [101])
+        if (!roleIds || roleIds.length <= 0) {
+          reject('权限不足,无法访问')
+        }
+        commit('SET_ROLES', roleIds)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', description)
-        data.roles = [101]
+        data.roles = roleIds
         resolve(data)
       }).catch(error => {
         reject(error)
       })
       // 获取动态路由
       queryMenuRouter().then(response => {
-        console.log(response)
         commit('SET_ROUTERS', response.data)
       }).catch(error => {
         reject(error)

@@ -33,13 +33,11 @@ router.beforeEach(async(to, from, next) => {
           // 获取用户信息
           // 注意：角色必须是对象数组！ 例如：['admin']或，['developer'，'editor']
           const { roles } = await store.dispatch('user/getInfo')
-          console.log(roles)
 
           // 根据角色生成可访问的路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
           // 动态加载菜单
-          console.log(accessRoutes)
           router.addRoutes(accessRoutes)
 
           // hack方法，以确保addRoutes完成
