@@ -49,8 +49,9 @@ export function getAsyncRoutes(routes) {
       if (item.component === 'Layout') {
         newItem.component = Layout
       } else {
-        // newItem.component = () => import(`@/views` + item.component)
-        newItem.component = () => import('@/views/system/menu')
+        // newItem.component = () => import(`@/views${item.component}`)
+        // newItem.component = loadView(item.component)
+        // newItem.component = () => import('@/views/system/menu')
         // newItem.component = () => import('@/views'.concat('/system/menu'))
       }
     }
@@ -65,6 +66,10 @@ export function getAsyncRoutes(routes) {
     res.push(newItem)
   })
   return res
+}
+
+export const loadView = (view) => {
+  return (resolve) => require([`@/views/${view}`], resolve)
 }
 
 const state = {
