@@ -49,11 +49,7 @@ export function getAsyncRoutes(routes) {
       if (item.component === 'Layout') {
         newItem.component = Layout
       } else {
-        console.log(item.component)
-        // newItem.component = () => import(`../../views${item.component}.vue`)
-        newItem.component = loadView(item.component)
-        // newItem.component = () => import('@/views/system/menu')
-        // newItem.component = () => import('@/views'.concat('/system/menu'))
+        newItem.component = (resolve) => require([`@/views${item.component}/`], resolve)
       }
     }
     for (const key in item) {
@@ -68,14 +64,6 @@ export function getAsyncRoutes(routes) {
   })
   return res
 }
-
-export const loadView = (view) => {
-  return (resolve) => require([`@/views${view}/index.vue`], resolve)
-}
-
-// export const loadView = (view) => {
-//   return () => import(`@/views${view}/index.vue`)
-// }
 
 const state = {
   routes: [],

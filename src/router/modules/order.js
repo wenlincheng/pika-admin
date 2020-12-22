@@ -1,9 +1,9 @@
 import Layout from '@/layout'
 
 const orderRouter = {
-  path: '/order-center',
+  path: '/trade-center',
   component: Layout,
-  redirect: '/order-center/item',
+  redirect: '/trade-center/item',
   name: 'OrderCenter',
   meta: {
     title: '订单中心',
@@ -11,8 +11,8 @@ const orderRouter = {
   },
   children: [
     {
-      path: '/order-center/order',
-      component: () => import('@/views/order-center/order'),
+      path: '/trade-center/order',
+      component: () => import('@/views/trade-center/order'),
       name: 'Order',
       meta: {
         title: '订单管理',
@@ -20,8 +20,8 @@ const orderRouter = {
       }
     },
     {
-      path: '/order-center/refund',
-      component: () => import('@/views/order-center/refund'),
+      path: '/trade-center/refund',
+      component: () => import('@/views/trade-center/refund'),
       name: 'Refund',
       meta: {
         title: '维权管理',
@@ -29,8 +29,8 @@ const orderRouter = {
       }
     },
     {
-      path: '/order-center/comment',
-      component: () => import('@/views/order-center/comment'),
+      path: '/trade-center/evaluation',
+      component: () => import('@/views/trade-center/evaluation'),
       name: 'Comment',
       meta: {
         title: '评价管理',

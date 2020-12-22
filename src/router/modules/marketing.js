@@ -1,9 +1,9 @@
 import Layout from '@/layout'
 
 const marketingRouter = {
-  path: '/marketing-center',
+  path: '/promotion-center',
   component: Layout,
-  redirect: '/marketing-center/discount',
+  redirect: '/promotion-center/discount',
   name: 'MarketingCenter',
   meta: {
     title: '营销中心',
@@ -11,8 +11,8 @@ const marketingRouter = {
   },
   children: [
     {
-      path: '/marketing-center/coupon',
-      component: () => import('@/views/marketing-center/coupon'),
+      path: '/promotion-center/coupon',
+      component: () => import('@/views/promotion-center/coupon'),
       name: 'Coupon',
       meta: {
         title: '优惠券',
@@ -20,8 +20,8 @@ const marketingRouter = {
       }
     },
     {
-      path: '/marketing-center/card',
-      component: () => import('@/views/marketing-center/card'),
+      path: '/promotion-center/card',
+      component: () => import('@/views/promotion-center/card'),
       name: 'Card',
       meta: {
         title: '权益卡',
@@ -29,8 +29,8 @@ const marketingRouter = {
       }
     },
     {
-      path: '/marketing-center/discount',
-      component: () => import('@/views/marketing-center/discount'),
+      path: '/promotion-center/discount',
+      component: () => import('@/views/promotion-center/discount'),
       name: 'Discount',
       meta: {
         title: '限时折扣',
@@ -38,8 +38,8 @@ const marketingRouter = {
       }
     },
     {
-      path: '/marketing-center/group',
-      component: () => import('@/views/marketing-center/group'),
+      path: '/promotion-center/group',
+      component: () => import('@/views/promotion-center/group'),
       name: 'Group',
       meta: {
         title: '多人拼团',

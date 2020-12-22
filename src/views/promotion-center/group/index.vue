@@ -173,8 +173,8 @@
         <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;" />
         <el-checkbox-group v-model="temp.resourceIds" @change="handleCheckedChange">
-          <span v-for="(resource) in resources">
-            <el-checkbox :key="resource.id" :label="resource.id" style="height: 15px;margin: 10px">
+          <span>
+            <el-checkbox v-for="(resource) in resources" :key="resource.id" :label="resource.id" style="height: 15px;margin: 10px">
               {{ resource.name }}
             </el-checkbox>
           </span>
