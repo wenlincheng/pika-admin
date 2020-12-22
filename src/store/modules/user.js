@@ -1,7 +1,8 @@
 import { login, logout, getUserInfo } from '@/api/system/login'
-import { queryMenuRouter } from '@/api/system/menu'
+// import { queryMenuRouter } from '@/api/system/menu'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+// import store from '..'
 
 const state = {
   token: getToken(),
@@ -74,12 +75,12 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
-      // 获取动态路由
-      queryMenuRouter().then(response => {
-        commit('SET_ROUTERS', response.data)
-      }).catch(error => {
-        reject(error)
-      })
+      // // 获取动态路由
+      // queryMenuRouter().then(response => {
+      //   commit('SET_ROUTERS', response.data)
+      // }).catch(error => {
+      //   reject(error)
+      // })
     })
   },
   // 退出登录

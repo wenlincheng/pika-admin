@@ -1,6 +1,6 @@
 import { constantRoutes } from '@/router'
-import store from '@/store'
 import Layout from '@/layout'
+import { queryMenuRouter } from '@/api/system/menu'
 
 /**
  * 使用meta.role确定当前用户是否具有权限
@@ -49,8 +49,9 @@ export function getAsyncRoutes(routes) {
       if (item.component === 'Layout') {
         newItem.component = Layout
       } else {
-        // newItem.component = () => import(`@/views${item.component}`)
-        // newItem.component = loadView(item.component)
+        console.log(item.component)
+        // newItem.component = () => import(`../../views${item.component}.vue`)
+        newItem.component = loadView(item.component)
         // newItem.component = () => import('@/views/system/menu')
         // newItem.component = () => import('@/views'.concat('/system/menu'))
       }
@@ -69,8 +70,12 @@ export function getAsyncRoutes(routes) {
 }
 
 export const loadView = (view) => {
-  return (resolve) => require([`@/views/${view}`], resolve)
+  return (resolve) => require([`@/views${view}/index.vue`], resolve)
 }
+
+// export const loadView = (view) => {
+//   return () => import(`@/views${view}/index.vue`)
+// }
 
 const state = {
   routes: [],
@@ -86,11 +91,16 @@ const mutations = {
 
 const actions = {
   generateRoutes({ commit }, roles) {
-    return new Promise(resolve => {
-      const asyncRoutes = getAsyncRoutes(store.getters.routers)
-      const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+    return new Promise((resolve, reject) => {
+      // 获取动态路由
+      queryMenuRouter().then(response => {
+        const asyncRoutes = getAsyncRoutes(response.data)
+        const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 }
