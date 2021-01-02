@@ -43,7 +43,7 @@ const devopsRouter = {
     {
       path: '/devops/sentinel',
       name: 'SentinelDashBoard',
-      component: () => import('@/views/devops/sentinel'),
+      component: () => import('@/views/system/monitor/sentinel'),
       meta: {
         title: '服务运维',
         icon: 'link'
@@ -52,7 +52,7 @@ const devopsRouter = {
     {
       path: '/devops/moss',
       name: 'Moss',
-      component: () => import('@/views/devops/moss'),
+      component: () => import('@/views/system/monitor/moss'),
       meta: {
         title: '服务管理',
         icon: 'link'
@@ -61,7 +61,7 @@ const devopsRouter = {
     {
       path: '/devops/swagger',
       name: 'Swagger',
-      component: () => import('@/views/devops/swagger'),
+      component: () => import('@/views/system/monitor/swagger'),
       meta: {
         title: '聚合文档',
         icon: 'link'

@@ -26,12 +26,12 @@
       <el-button
         v-waves
         class="filter-item"
-        type="primary"
+        type="danger"
         :loading="downloadLoading"
         icon="el-icon-refresh"
         @click="refreshGateway"
       >
-        刷新路由
+        发布路由
       </el-button>
     </div>
 
@@ -78,43 +78,37 @@
           </span>
         </template>
       </el-table-column>
-
-      <el-table-column width="50" align="center" label="排序">
-        <template slot-scope="scope">
-          <span>{{ scope.row.seq }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column align="center" label="描述">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-
+      <el-table-column width="50" align="center" label="排序">
+        <template slot-scope="scope">
+          <span>{{ scope.row.seq }}</span>
+        </template>
+      </el-table-column>
       <el-table-column width="50" align="center" label="状态">
         <template slot-scope="scope">
           <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
-
       <el-table-column width="160px" align="center" label="修改时间">
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
-
       <el-table-column width="160px" align="center" label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column fixed="right" header-align="center" align="center" label="操作" width="150">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">
             修改
           </el-button>
-          <el-button type="danger" size="mini" @click="deleteRole(scope.row.id)">
+          <el-button type="danger" size="mini" @click="deleteRoute(scope.row.id)">
             删除
           </el-button>
         </template>
@@ -304,35 +298,42 @@ export default {
       })
     },
     /**
-       * 查询路由列表
-       */
+     * 查询路由列表
+     */
     queryGateway() {
       this.listLoading = true
       queryGateway(this.listQuery).then(res => {
-        this.list = res.data
-        this.total = res.data.length
+        this.list = res.data.records
+        this.total = res.data.total
         this.listLoading = false
       })
     },
-
+    /**
+     * 发布路由
+     */
     refreshGateway() {
-      refreshGateway().then(() => {
-        this.$notify({
-          title: '刷新成功',
-          message: '刷新成功',
-          type: 'success',
-          duration: 2000
+      this.$confirm('此操作将发布网关路由到线上, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        refreshGateway().then(() => {
+          this.$notify({
+            title: '发布成功',
+            message: '发布成功',
+            type: 'success',
+            duration: 2000
+          })
         })
       })
     },
-
     handleFilter() {
       this.listQuery.current = 1
       this.queryGateway()
     },
     /**
-       * 修改每页显示条数
-       */
+     * 修改每页显示条数
+     */
     handleSizeChange(val) {
       this.listQuery.size = val
       this.queryGateway()
@@ -424,7 +425,7 @@ export default {
        * 删除路由
        * @param id
        */
-    deleteRole(id) {
+    deleteRoute(id) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

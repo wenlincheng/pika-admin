@@ -14,6 +14,7 @@ const getters = {
   errorLogs: state => state.errorLog.logs,
   nacosServer: state => state.api.nacosServer,
   sentinelDashboard: state => state.api.sentinelDashboard,
+  pikaUpmsDruid: state => state.api.pikaUpmsDruid,
   mossServer: state => state.api.mossServer,
   swaggerApi: state => state.api.swaggerApi
 
