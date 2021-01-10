@@ -169,7 +169,6 @@ export default {
         if (this.dataForm.id) {
           // 修改
           getMenu(this.dataForm.id).then(({ data }) => {
-            console.log(data)
             this.dataForm.id = data.id
             this.dataForm.type = data.type
             this.dataForm.name = data.name
