@@ -222,7 +222,8 @@ export default {
         { key: '下架申请', value: 'DOWN_APPLY' },
         { key: '强制下架', value: 'FORCE_NO_SALE' }
       ]
-      for (const saleStatus in itemSaleStatus) {
+      for (const index in itemSaleStatus) {
+        const saleStatus = itemSaleStatus[index]
         if (status === saleStatus.value) {
           return saleStatus.key
         }
