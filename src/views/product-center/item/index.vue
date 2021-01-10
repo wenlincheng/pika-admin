@@ -117,7 +117,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="220">
+      <el-table-column align="center" label="操作" width="220" fixed="right">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdateStepOne(scope.row)">
             修改
