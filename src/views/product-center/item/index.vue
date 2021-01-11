@@ -38,9 +38,8 @@
         style="margin-left: 10px;"
         type="primary"
         icon="el-icon-edit"
-        @click="handleCreate"
-      >
-        新增
+        @click="handleCreateStepOne"
+      >新增
       </el-button>
       <el-button
         v-waves
@@ -74,7 +73,7 @@
         <template slot-scope="scope">
           <el-image style="width: 100px; height: 100px" :src="scope.row.mainPicUrl" :fit="cover" lazy>
             <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"/>
+              <i class="el-icon-picture-outline" />
             </div>
           </el-image>
         </template>
@@ -176,35 +175,35 @@
     </el-dialog>
 
     <!--授权页面-->
-<!--    <el-dialog title="授权" :visible.sync="authFormVisible">-->
-<!--      <el-form-->
-<!--        ref="dataForm"-->
-<!--        :model="dataForm"-->
-<!--        label-position="right"-->
-<!--        label-width="120px"-->
-<!--        style="width: 90%; margin-left:40px;"-->
-<!--      >-->
-<!--        <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>-->
-<!--        <div style="margin: 15px 0;" />-->
-<!--        <el-checkbox-group v-model="dataForm.resourceIds" @change="handleCheckedChange">-->
-<!--          <span v-for="(resource) in resources">-->
-<!--            <el-checkbox :key="resource.id" :label="resource.id" style="height: 15px;margin: 10px">-->
-<!--              {{ resource.name }}-->
-<!--            </el-checkbox>-->
-<!--          </span>-->
-<!--        </el-checkbox-group>-->
-<!--      </el-form>-->
-<!--      &lt;!&ndash;对话框动作按钮&ndash;&gt;-->
-<!--      <div slot="footer" class="dialog-footer">-->
-<!--        <el-button @click="authFormVisible = false">取消</el-button>-->
-<!--        <el-button type="primary" @click="updateDataStepOne">保存</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
+    <!--    <el-dialog title="授权" :visible.sync="authFormVisible">-->
+    <!--      <el-form-->
+    <!--        ref="dataForm"-->
+    <!--        :model="dataForm"-->
+    <!--        label-position="right"-->
+    <!--        label-width="120px"-->
+    <!--        style="width: 90%; margin-left:40px;"-->
+    <!--      >-->
+    <!--        <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>-->
+    <!--        <div style="margin: 15px 0;" />-->
+    <!--        <el-checkbox-group v-model="dataForm.resourceIds" @change="handleCheckedChange">-->
+    <!--          <span v-for="(resource) in resources">-->
+    <!--            <el-checkbox :key="resource.id" :label="resource.id" style="height: 15px;margin: 10px">-->
+    <!--              {{ resource.name }}-->
+    <!--            </el-checkbox>-->
+    <!--          </span>-->
+    <!--        </el-checkbox-group>-->
+    <!--      </el-form>-->
+    <!--      &lt;!&ndash;对话框动作按钮&ndash;&gt;-->
+    <!--      <div slot="footer" class="dialog-footer">-->
+    <!--        <el-button @click="authFormVisible = false">取消</el-button>-->
+    <!--        <el-button type="primary" @click="updateDataStepOne">保存</el-button>-->
+    <!--      </div>-->
+    <!--    </el-dialog>-->
   </div>
 </template>
 
 <script>
-import { queryPageList, getItemStepOne, getItemStepTwo, createItemStepOne, createItemStepTwo, updateItemStepOne, updateItemStepTwo, deleteItem } from '@/api/product/item'
+import { queryPageList, deleteItem } from '@/api/product/item'
 import waves from '@/directive/waves' // 水波纹指令
 
 export default {
@@ -295,138 +294,39 @@ export default {
       this.queryPage()
     },
     /**
-       * 修改每页显示条数
-       */
+     * 修改每页显示条数
+     */
     handleSizeChange(val) {
       this.listQuery.size = val
       this.queryPage()
     },
     /**
-       * 跳转到指定页
-       */
+     * 跳转到指定页
+     */
     handleCurrentChange(val) {
       this.listQuery.current = val
       this.queryPage()
     },
 
     /**
-       * 弹出新增商品对话框
-       */
-    handleCreate() {
-      this.dataForm = {}
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+     * 点击新增按钮
+     */
+    handleCreateStepOne() {
+      this.$router.push({ name: 'itemFormStepOne', query: { operationType: 'create' }})
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
     /**
-       * 新增商品 Step1
-       */
-    createDataStepOne() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          createItemStepOne(this.dataForm).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '创建成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.queryPage()
-          })
-        }
-      })
-    },
-    /**
-     * 新增商品 Step2
+     * 点击修改按钮
      */
-    createDataStepTwo() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          createItemStepTwo(this.dataForm).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '创建成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.queryPage()
-          })
-        }
-      })
-    },
-    /**
-       * 点击更新按钮 Step1
-       */
     handleUpdateStepOne(row) {
-      getItemStepOne(row.id).then(({ data }) => {
-        this.dataForm = data.data
-      })
-      this.dialogStatus = 'edit'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.$router.push({ name: 'itemFormStepOne', query: { itemId: row.id, operationType: 'edit' }})
     },
     /**
-     * 点击更新按钮 Step2
+     * 删除商品
+     * @param id
      */
-    handleUpdateStepTwo(row) {
-      getItemStepTwo(row.id).then(({ data }) => {
-        this.dataForm = data.data
-      })
-      this.dialogStatus = 'edit'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-
-    /**
-       * 更新商品 Step1
-       */
-    updateDataStepOne() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          updateItemStepOne(this.dataForm).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '编辑成功',
-              message: '编辑成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.queryPage()
-          })
-        }
-      })
-    },
-    /**
-     * 更新商品 Step2
-     */
-    updateDataStepTwo() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          updateItemStepTwo(this.dataForm).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '编辑成功',
-              message: '编辑成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.queryPage()
-          })
-        }
-      })
-    },
-    /**
-       * 删除商品
-       * @param id
-       */
     deleteItem(id) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',

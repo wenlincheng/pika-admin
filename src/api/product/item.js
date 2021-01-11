@@ -10,14 +10,14 @@ export function queryPageList(data) {
 
 export function getItemStepOne(id) {
   return request({
-    url: '/pika-item/item/step1' + id,
+    url: '/pika-item/item/step1/' + id,
     method: 'get'
   })
 }
 
 export function getItemStepTwo(id) {
   return request({
-    url: '/pika-item/item/step2' + id,
+    url: '/pika-item/item/step2/' + id,
     method: 'get'
   })
 }

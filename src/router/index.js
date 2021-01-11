@@ -101,6 +101,20 @@ export const constantRoutes = [
         meta: { title: '个人中心', icon: 'user', noCache: true }
       }
     ]
+  },
+  {
+    path: '/product-center/item/formStepOne',
+    component: Layout,
+    redirect: '/product-center/item/formStepOne',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/product-center/item/formStepOne'),
+        name: 'itemFormStepOne',
+        meta: { title: '商品新增-step1', icon: 'user', noCache: true }
+      }
+    ]
   }
 ]
 
