@@ -112,7 +112,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/product-center/item/formStepOne'),
         name: 'itemFormStepOne',
-        meta: { title: '商品新增-step1', icon: 'user', noCache: true }
+        meta: { title: '商品表单', icon: 'user', noCache: true }
       }
     ]
   }
