@@ -190,13 +190,13 @@
           <el-input v-model="dataForm.title" placeholder="日志标题" />
         </el-form-item>
         <el-form-item label="操作用户" prop="username">
-          <el-input v-model="dataForm.username" placeholder="请输入日志名" />
+          <el-input v-model="dataForm.username" placeholder="操作用户" />
         </el-form-item>
-        <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="dataForm.clientIp" placeholder="请输入日志手机号" />
+        <el-form-item label="客户端IP" prop="clientIp">
+          <el-input v-model="dataForm.clientIp" placeholder="客户端IP" />
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="dataForm.userAgent" placeholder="请输入日志姓名" />
+        <el-form-item label="用户代理" prop="userAgent">
+          <el-input v-model="dataForm.userAgent" placeholder="用户代理" />
         </el-form-item>
         <el-form-item label="请求URL" prop="url">
           <el-input v-model="dataForm.url" placeholder="请求URL" />
