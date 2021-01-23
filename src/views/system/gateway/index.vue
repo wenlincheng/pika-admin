@@ -9,7 +9,21 @@
         placeholder="路由id"
         @keyup.enter.native="handleFilter"
       />
-
+      <el-select
+        v-model="listQuery.type"
+        clearable
+        style="width: 150px"
+        class="filter-item"
+        placeholder="请选择路由类型"
+        @keyup.enter.native="handleFilter"
+      >
+        <el-option
+          v-for="item in routeType"
+          :key="item.key"
+          :label="item.key"
+          :value="item.value"
+        />
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -37,13 +51,13 @@
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column type="index" width="50" align="center" label="序列" />
-      <el-table-column width="180px" align="left" label="路由ID">
+      <el-table-column width="120px" align="left" label="路由ID">
         <template slot-scope="scope">
           <span>{{ scope.row.routeId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="250px" align="left" label="uri路径">
+      <el-table-column width="180px" align="left" label="uri路径">
         <template slot-scope="scope">
           <span>{{ scope.row.uri }}</span>
         </template>
@@ -83,14 +97,14 @@
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50" align="center" label="排序">
+      <el-table-column width="80" align="center" label="排序">
         <template slot-scope="scope">
           <span>{{ scope.row.seq }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50" align="center" label="状态">
+      <el-table-column width="80" align="center" label="状态">
         <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
+          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column width="160px" align="center" label="修改时间">
@@ -134,25 +148,25 @@
       <el-form
         ref="dataForm"
         :rules="rules"
-        :model="temp"
+        :model="dataForm"
         label-position="right"
         label-width="120px"
         status-icon
         style="width: 80%; margin-left:30px;"
       >
         <el-form-item label="路由id" prop="routeId">
-          <el-input v-model="temp.routeId" placeholder="请输入路由id" />
+          <el-input v-model="dataForm.routeId" placeholder="请输入路由id" />
         </el-form-item>
 
         <el-form-item label="uri路径" prop="uri">
-          <el-input v-model="temp.uri" placeholder="请输入uri路径,如:lb://或http://" />
+          <el-input v-model="dataForm.uri" placeholder="请输入uri路径,如:lb://或http://" />
         </el-form-item>
-        <!--predicates输入框-->
+        <!-- 路由规则输入框 -->
         <el-form-item
-          v-for="(predicates, index) in temp.predicates"
+          v-for="(predicates, index) in dataForm.predicates"
           :key="0+index"
-          :label="'predicate' + (index+1)"
-          :rules="{ required: true, message: 'predicates不能为空', trigger: 'blur'}"
+          :label="'路由规则【' + (index+1)+'】'"
+          :rules="{ required: true, message: '路由规则不能为空', trigger: 'blur'}"
         >
 
           <el-input
@@ -165,13 +179,13 @@
             v-model="predicates.args.pattern"
             :prop="'predicates.' + index + '.args.pattern'"
             style="width: 40%"
-            placeholder="请输入路由表达式"
+            placeholder="请输入路由规则表达式"
           />
           <el-button type="danger" icon="el-icon-minus" circle size="mini" @click="removePredicate(index)" />
           <el-button type="primary" icon="el-icon-plus" circle size="mini" @click="addPredicate" />
         </el-form-item>
-        <!--filters-->
-        <el-form-item v-for="(filters, index) in temp.filters" :key="1+index" :label="'filter' + (index+1)">
+        <!-- 过滤器 -->
+        <el-form-item v-for="(filters, index) in dataForm.filters" :key="1+index" :label="'过滤器【' + (index+1)+'】'">
           <el-input
             v-model="filters.name"
             :prop="'filters.' + index + '.name'"
@@ -182,25 +196,25 @@
             v-model="filters.args.parts"
             :prop="'filters.' + index + '.args.parts'"
             style="width: 40%"
-            placeholder="请输入路由表达式"
+            placeholder="请输入过滤器配置"
           />
           <el-button type="danger" icon="el-icon-minus" circle size="mini" @click="removeFilter(index)" />
           <el-button type="primary" icon="el-icon-plus" circle size="mini" @click="addFilter" />
         </el-form-item>
 
         <el-form-item label="排序" prop="order">
-          <el-input v-model="temp.seq" type="number" placeholder="请输入优先级" />
+          <el-input v-model="dataForm.seq" type="number" placeholder="请输入优先级" />
         </el-form-item>
 
         <el-form-item label="描述" prop="description">
-          <el-input v-model="temp.description" type="textarea" :rows="3" placeholder="请输入描述内容" />
+          <el-input v-model="dataForm.description" type="textarea" :rows="3" placeholder="请输入描述内容" />
         </el-form-item>
       </el-form>
       <!--对话框动作按钮-->
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cleanUpTemp">清空</el-button>
+        <el-button @click="cleanDataForm">清空</el-button>
         <el-button @click="dialogFormVisible=false">取消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">创建</el-button>
+        <el-button v-if="dialogStatus === 'create'" type="primary" @click="createData">创建</el-button>
         <el-button v-else type="primary" @click="updateData">修改</el-button>
       </div>
     </el-dialog>
@@ -218,13 +232,22 @@ export default {
     waves
   },
   filters: {
+    // 状态标签样式
     statusFilter(status) {
       const statusMap = {
-        deleted: 'info',
-        ok: 'success'
+        0: 'danger',
+        1: 'success'
       }
       return statusMap[status]
-    }
+    },
+    // 状态名称
+    statusNameFilter(status) {
+      const statusMap = {
+        0: '锁定',
+        1: '激活'
+      }
+      return statusMap[status]
+    },
   },
   data() {
     return {
@@ -236,13 +259,18 @@ export default {
         current: 1,
         size: 10
       },
+      routeType: [
+        { key: 'ADMIN', value: 'ADMIN' },
+        { key: 'APP', value: 'APP' },
+        { key: 'WEB', value: 'WEB' }
+      ],
       dialogStatus: 'create',
       dialogFormVisible: false,
       rules: {
         routeId: [{ required: true, message: '路由id必填', trigger: 'blur' }],
         uri: [{ required: true, message: 'uri路径必填', trigger: 'blur' }]
       },
-      temp: {
+      dataForm: {
         routeId: '',
         uri: '',
         orders: '',
@@ -276,10 +304,10 @@ export default {
   },
   methods: {
     removePredicate(index) {
-      this.temp.predicates.splice(index, 1)
+      this.dataForm.predicates.splice(index, 1)
     },
     addPredicate() {
-      this.temp.predicates.push({
+      this.dataForm.predicates.push({
         name: '',
         args: {
           pattern: ''
@@ -287,10 +315,10 @@ export default {
       })
     },
     removeFilter(index) {
-      this.temp.filters.splice(index, 1)
+      this.dataForm.filters.splice(index, 1)
     },
     addFilter() {
-      this.temp.filters.push({
+      this.dataForm.filters.push({
         name: '',
         args: {
           parts: ''
@@ -356,19 +384,19 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    cleanUpTemp() {
-      this.temp.routeId = ''
-      this.temp.order = ''
-      this.temp.status = ''
-      this.temp.description = ''
-      this.temp.uri = ''
-      for (let i = 0; i < this.temp.predicates.length; i++) {
-        this.temp.predicates[i].name = ''
-        this.temp.predicates[i].args.pattern = ''
+    cleanDataForm() {
+      this.dataForm.routeId = ''
+      this.dataForm.order = ''
+      this.dataForm.status = ''
+      this.dataForm.description = ''
+      this.dataForm.uri = ''
+      for (let i = 0; i < this.dataForm.predicates.length; i++) {
+        this.dataForm.predicates[i].name = ''
+        this.dataForm.predicates[i].args.pattern = ''
       }
-      for (let j = 0; j < this.temp.filters.length; j++) {
-        this.temp.filters[j].name = ''
-        this.temp.filters[j].args.parts = ''
+      for (let j = 0; j < this.dataForm.filters.length; j++) {
+        this.dataForm.filters[j].name = ''
+        this.dataForm.filters[j].args.parts = ''
       }
       this.queryGateway()
     },
@@ -378,8 +406,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.status = this.defaultGateway
-          addGateway(this.temp).then(() => {
+          this.dataForm.status = this.defaultGateway
+          addGateway(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '创建成功',
@@ -394,8 +422,8 @@ export default {
     },
 
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.defaultGateway = this.temp.status
+      this.dataForm = Object.assign({}, row) // copy obj
+      this.defaultGateway = this.dataForm.status
       this.dialogStatus = 'edit'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -408,7 +436,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateGateway(this.temp).then(() => {
+          updateGateway(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '编辑成功',

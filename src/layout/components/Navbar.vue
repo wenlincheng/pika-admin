@@ -29,12 +29,12 @@
           <router-link to="/profile/index">
             <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
-          <router-link to="/">
-            <el-dropdown-item>图表</el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
+<!--          <router-link to="/">-->
+<!--            <el-dropdown-item>图表</el-dropdown-item>-->
+<!--          </router-link>-->
+<!--          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">-->
+<!--            <el-dropdown-item>Docs</el-dropdown-item>-->
+<!--          </a>-->
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出登录</span>
           </el-dropdown-item>
