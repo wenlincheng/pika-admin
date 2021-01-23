@@ -152,7 +152,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" header-align="center" align="center" label="操作" width="150">
+      <el-table-column fixed="right" header-align="center" align="center" label="操作" width="120">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleDetail(scope.row.id)">
             详情
@@ -186,38 +186,62 @@
         status-icon
         style="width: 80%; margin-left:60px;"
       >
-        <el-form-item label="日志标题" prop="username">
-          <el-input v-model="dataForm.title" placeholder="日志标题" />
-        </el-form-item>
-        <el-form-item label="操作用户" prop="username">
-          <el-input v-model="dataForm.username" placeholder="操作用户" />
-        </el-form-item>
-        <el-form-item label="客户端IP" prop="clientIp">
-          <el-input v-model="dataForm.clientIp" placeholder="客户端IP" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="日志标题" prop="username">
+              <el-input v-model="dataForm.title" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="操作用户" prop="username">
+              <el-input v-model="dataForm.username" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="客户端IP" prop="clientIp">
+              <el-input v-model="dataForm.clientIp" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="日志类型" prop="type">
+              <el-input v-model="dataForm.type" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="请求URL" prop="url">
+              <el-input v-model="dataForm.url" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="请求URI" prop="uri">
+              <el-input v-model="dataForm.uri" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="请求方法" prop="method">
+              <el-input v-model="dataForm.method" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="执行时长" prop="time">
+              <el-input v-model="dataForm.time"  disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="用户代理" prop="userAgent">
-          <el-input v-model="dataForm.userAgent" placeholder="用户代理" />
-        </el-form-item>
-        <el-form-item label="请求URL" prop="url">
-          <el-input v-model="dataForm.url" placeholder="请求URL" />
-        </el-form-item>
-        <el-form-item label="请求URI" prop="uri">
-          <el-input v-model="dataForm.uri" placeholder="请求URI" />
-        </el-form-item>
-        <el-form-item label="请求方法" prop="method">
-          <el-input v-model="dataForm.method" placeholder="请求方法" />
+          <el-input v-model="dataForm.userAgent" type="textarea" disabled />
         </el-form-item>
         <el-form-item label="请求参数" prop="params">
-          <el-input v-model="dataForm.params" placeholder="请求参数" />
-        </el-form-item>
-        <el-form-item label="执行时长" prop="time">
-          <el-input v-model="dataForm.time" placeholder="执行时长" />
+          <el-input v-model="dataForm.params" type="textarea" disabled />
         </el-form-item>
         <el-form-item label="异常信息" prop="exceptionMessage">
-          <el-input v-model="dataForm.exceptionMessage" placeholder="异常信息" />
-        </el-form-item>
-        <el-form-item label="日志类型" prop="type">
-          <el-input v-model="dataForm.type" placeholder="日志类型" />
+          <el-input v-model="dataForm.exceptionMessage" type="textarea" disabled />
         </el-form-item>
       </el-form>
       <!--对话框动作按钮-->
