@@ -71,7 +71,7 @@
       </el-table-column>
       <el-table-column width="120px" align="center" label="商品主图">
         <template slot-scope="scope">
-          <el-image style="width: 100px; height: 100px" :src="scope.row.mainPicUrl" :fit="cover" lazy>
+          <el-image style="width: 60px; height: 60px" :src="scope.row.mainPicUrl" :fit="cover" lazy>
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline" />
             </div>
@@ -80,22 +80,22 @@
       </el-table-column>
       <el-table-column width="120px" align="center" label="最低划线价">
         <template slot-scope="scope">
-          <span>{{ scope.row.minLinePrice }}</span>
+          <span style="color: red">{{ scope.row.minLinePrice }}</span>
         </template>
       </el-table-column>
       <el-table-column width="120px" align="center" label="最大划线价">
         <template slot-scope="scope">
-          <span>{{ scope.row.maxLinePrice }}</span>
+          <span style="color: red">{{ scope.row.maxLinePrice }}</span>
         </template>
       </el-table-column>
       <el-table-column width="120px" align="center" label="最小单价">
         <template slot-scope="scope">
-          <span>{{ scope.row.minUnitPrice }}</span>
+          <span style="color: red">{{ scope.row.minUnitPrice }}</span>
         </template>
       </el-table-column>
       <el-table-column width="120px" align="center" label="最大单价">
         <template slot-scope="scope">
-          <span>{{ scope.row.maxUnitPrice }}</span>
+          <span style="color: red">{{ scope.row.maxUnitPrice }}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="销售状态" width="80px">
