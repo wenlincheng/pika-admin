@@ -33,27 +33,15 @@
 
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
-        @click="handleCreateStepOne"
-      >新增
-      </el-button>
-      <el-button
-        v-waves
-        class="filter-item"
-        type="primary"
-        :loading="downloadLoading"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >
-        导出
-      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreateStepOne">新增</el-button>
+      <br>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreateStepOne">批量下架</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreateStepOne">批量上架</el-button>
+      <el-button v-waves class="filter-item" type="primary" :loading="downloadLoading" icon="el-icon-download" @click="handleDownload">导出</el-button>
     </div>
 
-    <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+    <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" />
 <!--      <el-table-column type="index" width="100px" align="center" label="ID" >-->
 <!--        <template slot-scope="scope">-->
 <!--          <span>{{ scope.row.id }}</span>-->
@@ -263,7 +251,8 @@ export default {
         description: '',
         resourceIds: []
       },
-      downloadLoading: false
+      downloadLoading: false,
+      multipleSelection: []
     }
   },
   created() {
@@ -344,7 +333,11 @@ export default {
         })
       })
     },
-
+    // 多选
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+      console.log(val)
+    },
     handleDownload() {
       console.log('download')
     }
