@@ -50,7 +50,7 @@
     </div>
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column type="index" width="50" align="center" label="序列" />
+<!--      <el-table-column type="index" width="50" align="center" label="序列" />-->
       <el-table-column width="120px" align="left" label="路由ID">
         <template slot-scope="scope">
           <span>{{ scope.row.routeId }}</span>
