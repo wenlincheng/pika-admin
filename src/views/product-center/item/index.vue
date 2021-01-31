@@ -54,11 +54,11 @@
     </div>
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column type="index" width="100px" align="center" label="ID">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
+<!--      <el-table-column type="index" width="100px" align="center" label="ID" >-->
+<!--        <template slot-scope="scope">-->
+<!--          <span>{{ scope.row.id }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column width="150px" align="center" label="商品名称">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
@@ -71,7 +71,7 @@
       </el-table-column>
       <el-table-column width="120px" align="center" label="商品主图">
         <template slot-scope="scope">
-          <el-image style="width: 60px; height: 60px" :src="scope.row.mainPicUrl" :fit="cover" lazy>
+          <el-image style="width: 40px; height: 40px" :src="scope.row.mainPicUrl" :fit="cover" lazy>
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline" />
             </div>

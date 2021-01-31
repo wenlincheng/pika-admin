@@ -15,6 +15,22 @@ export function login(data) {
   })
 }
 
+// 修改密码
+export function updatePassword(data) {
+  const updatePasswordParams = {
+    oldPassword: data.oldPassword,
+    password: data.password,
+    confirmPassword: data.confirmPassword,
+    grant_type: 'password',
+    scope: 'read'
+  }
+  return request({
+    url: '/pika-upms/user/password',
+    method: 'put',
+    data: updatePasswordParams
+  })
+}
+
 // 用户信息
 export function getUserInfo() {
   return request({

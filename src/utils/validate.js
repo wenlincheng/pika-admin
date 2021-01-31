@@ -20,6 +20,15 @@ export function validUsername(username) {
 }
 
 /**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validPassword(password) {
+  const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/
+  return reg.test(password.trim())
+}
+
+/**
  * @param {string} url
  * @returns {Boolean}
  */

@@ -55,21 +55,15 @@
     </div>
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column type="index" width="100px" align="center" label="ID">
+      <el-table-column width="150px" align="center" label="角色名">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="120px" align="center" label="角色代码">
         <template slot-scope="scope">
           <span>{{ scope.row.code }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="150px" align="center" label="角色名">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 

@@ -57,12 +57,6 @@
 
     <!--列表-->
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column type="index" width="100" align="center" label="ID" >
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column width="120px" align="center" label="用户名">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
@@ -71,7 +65,11 @@
 
       <el-table-column width="100px" align="center" label="头像">
         <template slot-scope="scope">
-          <img :src="scope.row.avatar" alt="" style="width: 50px;height: 50px">
+          <el-image style="width: 40px; height: 40px" :src="scope.row.avatar" :fit="cover" lazy>
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline" />
+            </div>
+          </el-image>
         </template>
       </el-table-column>
 

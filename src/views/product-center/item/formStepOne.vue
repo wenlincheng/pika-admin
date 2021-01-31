@@ -12,9 +12,9 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="dataForm.name" placeholder="请输入商品名称" />
       </el-form-item>
-      <el-form-item label="商品编码" prop="code">
-        <el-input v-model="dataForm.code" placeholder="请输入商品编码" />
-      </el-form-item>
+<!--      <el-form-item label="商品编码" prop="code">-->
+<!--        <el-input v-model="dataForm.code" placeholder="请输入商品编码" />-->
+<!--      </el-form-item>-->
       <el-form-item label="商品描述" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
       </el-form-item>
