@@ -86,7 +86,7 @@
 
     <!--列表-->
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column width="120px" align="center" label="日志标题">
+      <el-table-column width="200px" align="center" label="日志标题">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
         </template>

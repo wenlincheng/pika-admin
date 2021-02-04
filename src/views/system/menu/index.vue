@@ -27,12 +27,7 @@
         新增
       </el-button>
     </div>
-    <el-table
-      :data="list"
-      border
-      style="width: 100%;"
-      row-key="id"
-    >
+    <el-table v-loading.body="listLoading" :data="list" border style="width: 100%;" row-key="id">
       <el-table-column
         prop="name"
         header-align="center"
@@ -183,7 +178,6 @@ export default {
   data() {
     return {
       dataForm: {},
-      dataListLoading: false,
       addOrUpdateVisible: false,
       list: [],
       total: 0,
@@ -206,11 +200,11 @@ export default {
   methods: {
     // 获取数据列表
     getDataList() {
-      this.dataListLoading = true
+      this.listLoading = true
       queryPageList(this.listQuery).then(response => {
         this.list = treeDataTranslate(response.data.records, 'id')
         this.total = response.data.total
-        this.dataListLoading = false
+        this.listLoading = false
       })
     },
     handleFilter() {
