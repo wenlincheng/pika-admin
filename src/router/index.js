@@ -9,7 +9,6 @@ import Layout from '@/layout'
 /* Router Modules */
 import systemRouter from './modules/system'
 import productRouter from './modules/product'
-import orderRouter from './modules/order'
 import contentRouter from './modules/content'
 import devopsRouter from './modules/deops'
 import tableRouter from './modules/table'
@@ -130,7 +129,6 @@ export const constantRoutes = [
 export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
   productRouter,
-  orderRouter,
   marketingRouter,
   memberRouter,
   contentRouter,
