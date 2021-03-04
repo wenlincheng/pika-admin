@@ -12,4 +12,4 @@
 
 # 始作俑者
 
-- PICK_MAN
+- Pikaman
