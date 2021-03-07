@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function queryPageList(data) {
+export function queryMenuListByPid(parentId) {
   return request({
-    url: '/pika-upms/menu/page',
-    method: 'get',
-    params: data
+    url: '/pika-upms/menu/list/' + parentId,
+    method: 'get'
   })
 }
 

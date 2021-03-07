@@ -153,7 +153,6 @@ export default {
   },
   created() {
     this.iconList = Icon.getNameList()
-    console.log(this.iconList)
   },
   methods: {
     init(id) {
@@ -185,8 +184,19 @@ export default {
         }
       })
     },
+    initAddChildren(parentId) {
+      queryAllMenu().then(response => {
+        this.menuList = treeDataTranslate(response.data, 'id')
+      }).then(() => {
+        this.visible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].resetFields()
+        })
+      }).then(() => {
+        this.selectedMenu = idList(this.menuList, parentId, 'id', 'children').reverse()
+      })
+    },
     handleSelectMenuChange(val) {
-      console.log(val)
       this.dataForm.parentId = val[val.length - 1]
     },
     // 图标选中
@@ -210,7 +220,6 @@ export default {
               })
             })
           } else {
-            console.log(this.dataForm)
             createMenu(this.dataForm).then(({ data }) => {
               this.$message({
                 message: '创建成功',

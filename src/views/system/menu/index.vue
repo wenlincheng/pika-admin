@@ -1,33 +1,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input
-        v-model="listQuery.name"
-        style="width: 200px;"
-        class="filter-item"
-        placeholder="名称"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-input
-        v-model="listQuery.perms"
-        style="width: 200px;"
-        class="filter-item"
-        placeholder="授权标识"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-plus"
-        @click="addOrUpdateHandle()"
-      >
-        新增
-      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="addOrUpdateHandle()">新增</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">刷新</el-button>
     </div>
-    <el-table v-loading.body="listLoading" :data="list" border style="width: 100%;" row-key="id">
+    <el-table v-loading.body="listLoading" :data="list" border style="width: 100%;" row-key="id" lazy :load="lazyLoad" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column
         prop="name"
         header-align="center"
@@ -115,39 +92,16 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="300"
         label="操作"
       >
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="addOrUpdateHandle(scope.row.id)"
-          >修改
-          </el-button>
-          <el-button
-            type="danger"
-            size="mini"
-            @click="deleteHandle(scope.row.id)"
-          >删除
-          </el-button>
+          <el-button type="primary" size="mini" @click="addChildren(scope.row.id)">新增子菜单</el-button>
+          <el-button type="primary" size="mini" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="danger" size="mini" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <!--翻页工具条-->
-    <div class="pagination-container">
-      <el-pagination
-        background
-        :current-page="listQuery.current"
-        :page-sizes="[10, 20, 30, 50]"
-        :page-size="listQuery.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       v-if="addOrUpdateVisible"
@@ -160,7 +114,7 @@
 <script>
 import AddOrUpdate from './form'
 import { treeDataTranslate } from '@/utils'
-import { queryPageList, deleteMenu } from '@/api/system/menu'
+import { deleteMenu, queryMenuListByPid } from '@/api/system/menu'
 
 import waves from '@/directive/waves'
 
@@ -182,10 +136,6 @@ export default {
       list: [],
       total: 0,
       listLoading: true,
-      listQuery: {
-        current: 1,
-        size: 10
-      },
       dialogStatus: 'create',
       dialogFormVisible: false,
       authFormVisible: false,
@@ -201,37 +151,26 @@ export default {
     // 获取数据列表
     getDataList() {
       this.listLoading = true
-      queryPageList(this.listQuery).then(response => {
-        this.list = treeDataTranslate(response.data.records, 'id')
-        this.total = response.data.total
+      queryMenuListByPid(0).then(response => {
+        this.list = treeDataTranslate(response.data, 'id')
         this.listLoading = false
       })
     },
-    handleFilter() {
-      this.listQuery.current = 1
-      this.getDataList()
+    lazyLoad(tree, treeNode, resolve) {
+      queryMenuListByPid(tree.id).then(response => {
+        resolve(treeDataTranslate(response.data, 'id'))
+      })
     },
-    // 重置搜索条件
+    // 刷新
     handleRefresh() {
-      this.listQuery = {
-        current: 1,
-        size: 10
-      }
       this.getDataList()
     },
-    /**
-     * 修改每页显示条数
-     */
-    handleSizeChange(val) {
-      this.listQuery.size = val
-      this.getDataList()
-    },
-    /**
-     * 跳转到指定页
-     */
-    handleCurrentChange(val) {
-      this.listQuery.current = val
-      this.getDataList()
+    // 添加子菜单
+    addChildren(parentId) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.initAddChildren(parentId)
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle(id) {

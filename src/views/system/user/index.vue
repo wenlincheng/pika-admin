@@ -38,25 +38,23 @@
           :value="item.value"
         />
       </el-select>
-
-      <!--动作按钮-->
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
-      <el-button
-        v-waves
-        class="filter-item"
-        type="primary"
-        icon="el-icon-download"
-        :loading="downloadLoading"
-        @click="handleDownload"
-      >
-        导出
-      </el-button>
+      <!--动作按钮-->
+      <div style="margin-top: 20px">
+        <el-button v-waves class="filter-item" type="primary" @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
+        <el-button v-waves class="filter-item" type="primary" @click="toggleSelection()">取消选择</el-button>
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-download" :loading="downloadLoading" @click="handleDownload">导出</el-button>
+      </div>
     </div>
 
     <!--列表-->
-    <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+    <el-table ref="multipleTable" v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column width="120px" align="center" label="用户名">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
@@ -246,6 +244,7 @@ export default {
     return {
       list: [],
       total: 0,
+      multipleSelection: [],
       listLoading: true,
       downloadLoading: false,
       // 查询参数
@@ -282,6 +281,19 @@ export default {
     this.resetForm()
   },
   methods: {
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    // 批量选择
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
     /**
        * 用户列表
        */
