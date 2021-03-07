@@ -30,28 +30,12 @@
           :value="item.value"
         />
       </el-select>
-
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
-        @click="addOrUpdateHandle()"
-      >
-        新增
-      </el-button>
-      <el-button
-        v-waves
-        class="filter-item"
-        type="primary"
-        :loading="downloadLoading"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >
-        导出
-      </el-button>
+      <div style="margin-top: 20px">
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-waves class="filter-item" type="primary" :loading="downloadLoading" icon="el-icon-download" @click="handleDownload">导出</el-button>
+      </div>
     </div>
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
