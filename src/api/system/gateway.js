@@ -9,6 +9,13 @@ export function queryGateway(data) {
   })
 }
 
+export function getGateway(id) {
+  return request({
+    url: '/pika-upms/gateway/' + id,
+    method: 'get'
+  })
+}
+
 export function addGateway(data) {
   data.orders = data.order
   return request({

@@ -119,7 +119,7 @@
       </el-table-column>
       <el-table-column fixed="right" header-align="center" align="center" label="操作" width="150">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row.id)">
             修改
           </el-button>
           <el-button type="danger" size="mini" @click="deleteRoute(scope.row.id)">
@@ -213,7 +213,7 @@
       <!--对话框动作按钮-->
       <div slot="footer" class="dialog-footer">
         <el-button @click="cleanDataForm">清空</el-button>
-        <el-button @click="dialogFormVisible=false">取消</el-button>
+        <el-button @click="cleanDataForm">取消</el-button>
         <el-button v-if="dialogStatus === 'create'" type="primary" @click="createData">创建</el-button>
         <el-button v-else type="primary" @click="updateData">修改</el-button>
       </div>
@@ -224,7 +224,7 @@
 <script>
 
 import waves from '@/directive/waves'
-import { queryGateway, addGateway, deleteGateway, updateGateway, refreshGateway } from '@/api/system/gateway'
+import { queryGateway, getGateway, addGateway, deleteGateway, updateGateway, refreshGateway } from '@/api/system/gateway'
 
 export default {
   name: 'Index',
@@ -273,7 +273,7 @@ export default {
       dataForm: {
         routeId: '',
         uri: '',
-        orders: '',
+        seq: 0,
         description: '',
         predicates: [{
           name: '',
@@ -303,9 +303,15 @@ export default {
     this.queryGateway()
   },
   methods: {
+    /**
+     * 删除路由规则
+     */
     removePredicate(index) {
       this.dataForm.predicates.splice(index, 1)
     },
+    /**
+     * 添加路由规则
+     */
     addPredicate() {
       this.dataForm.predicates.push({
         name: '',
@@ -314,9 +320,15 @@ export default {
         }
       })
     },
+    /**
+     * 删除过滤器
+     */
     removeFilter(index) {
       this.dataForm.filters.splice(index, 1)
     },
+    /**
+     * 添加过滤器
+     */
     addFilter() {
       this.dataForm.filters.push({
         name: '',
@@ -367,42 +379,49 @@ export default {
       this.queryGateway()
     },
     /**
-       * 跳转到指定页
-       */
+     * 跳转到指定页
+     */
     handleCurrentChange(val) {
       this.listQuery.current = val
       this.queryGateway()
     },
-
     /**
-       * 弹出新增路由对话框
-       */
+     * 弹出新增路由对话框
+     */
     handleCreate() {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
+      this.cleanDataForm()
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    /**
+     * 清空表单
+     */
     cleanDataForm() {
-      this.dataForm.routeId = ''
-      this.dataForm.order = ''
-      this.dataForm.status = ''
-      this.dataForm.description = ''
-      this.dataForm.uri = ''
-      for (let i = 0; i < this.dataForm.predicates.length; i++) {
-        this.dataForm.predicates[i].name = ''
-        this.dataForm.predicates[i].args.pattern = ''
+      this.dataForm = {
+        routeId: '',
+        uri: '',
+        seq: 0,
+        description: '',
+        predicates: [{
+          name: '',
+          args: {
+            pattern: ''
+          }
+        }],
+        filters: [{
+          name: '',
+          args: {
+            parts: ''
+          }
+        }]
       }
-      for (let j = 0; j < this.dataForm.filters.length; j++) {
-        this.dataForm.filters[j].name = ''
-        this.dataForm.filters[j].args.parts = ''
-      }
-      this.queryGateway()
     },
     /**
-       * 新增路由
-       */
+     * 新增路由
+     */
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -420,9 +439,25 @@ export default {
         }
       })
     },
-
-    handleUpdate(row) {
-      this.dataForm = Object.assign({}, row) // copy obj
+    /**
+     * 弹出更新路由对话框
+     */
+    handleUpdate(id) {
+      getGateway(id).then(({ data }) => {
+        this.dataForm.id = data.id
+        this.dataForm.routeId = data.routeId
+        this.dataForm.uri = data.uri
+        this.dataForm.seq = data.seq
+        this.dataForm.description = data.description
+        for (let i = 0; i < data.predicates.length; i++) {
+          this.dataForm.predicates[i].name = data.predicates[i].name
+          this.dataForm.predicates[i].args.pattern = data.predicates[i].args.pattern
+        }
+        for (let j = 0; j < data.filters.length; j++) {
+          this.dataForm.filters[j].name = data.filters[j].name
+          this.dataForm.filters[j].args.parts = data.filters[j].args.parts
+        }
+      })
       this.defaultGateway = this.dataForm.status
       this.dialogStatus = 'edit'
       this.dialogFormVisible = true
@@ -431,8 +466,8 @@ export default {
       })
     },
     /**
-       * 更新路由
-       */
+     * 更新路由
+     */
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -450,9 +485,9 @@ export default {
       })
     },
     /**
-       * 删除路由
-       * @param id
-       */
+     * 删除路由
+     * @param id
+     */
     deleteRoute(id) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
