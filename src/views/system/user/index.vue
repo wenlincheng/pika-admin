@@ -53,8 +53,8 @@
     <el-table ref="multipleTable" v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
-        width="55">
-      </el-table-column>
+        width="55"
+      />
       <el-table-column width="120px" align="center" label="用户名">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
@@ -89,7 +89,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" label="角色">
+      <el-table-column min-width="200px" class-name="status-col" label="角色">
         <template slot-scope="scope">
           <el-tag v-for="item in scope.row.roleNames" style="margin: 2px;" type="info">{{ item }}</el-tag>
         </template>
