@@ -15,10 +15,10 @@
         <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
       </el-form-item>
       <el-form-item size="mini" label="授权">
-<!--        <el-input-->
-<!--          placeholder="输入关键字进行过滤"-->
-<!--          v-model="filterText">-->
-<!--        </el-input>-->
+        <!--        <el-input-->
+        <!--          placeholder="输入关键字进行过滤"-->
+        <!--          v-model="filterText">-->
+        <!--        </el-input>-->
         <el-checkbox ref="allCheck" v-model="checked" @change="allChecked">全选</el-checkbox>
         <el-tree
           ref="menuListTree"
@@ -54,7 +54,6 @@ export default {
         children: 'children'
       },
       dataForm: {
-        id: 0,
         code: '',
         name: '',
         description: '',
@@ -75,7 +74,7 @@ export default {
   },
   methods: {
     init(id) {
-      this.dataForm.id = id || 0
+      this.dataForm.id = id || null
       queryAllMenu().then(({ data }) => {
         this.menuList = treeDataTranslate(data, 'id', 'parentId')
       }).then(() => {

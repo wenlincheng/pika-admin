@@ -104,7 +104,6 @@ export default {
     return {
       visible: false,
       dataForm: {
-        id: 0,
         type: 1,
         name: '',
         parentId: 0,
@@ -156,7 +155,7 @@ export default {
   },
   methods: {
     init(id) {
-      this.dataForm.id = id || 0
+      this.dataForm.id = id || null
       queryAllMenu().then(response => {
         this.menuList = treeDataTranslate(response.data, 'id')
       }).then(() => {

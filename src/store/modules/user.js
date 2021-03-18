@@ -56,6 +56,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       // 查询用户信息
       getUserInfo(state.token).then(response => {
+        console.log(response)
         const { data } = response
         if (!data) {
           reject('权限不足,无法访问')

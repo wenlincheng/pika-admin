@@ -40,7 +40,7 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://127.0.0.1:8100`,
+        target: `http://127.0.0.1:8100`, // http://122.51.153.231:8100
         // target: `http://pika.free.idcfengye.com`,
         changeOrigin: true,
         pathRewrite: {
