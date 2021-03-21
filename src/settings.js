@@ -1,5 +1,5 @@
 module.exports = {
-  title: '三叉树后台管理',
+  title: '三叉树管理系统',
 
   /**
    * @type {boolean} true | false

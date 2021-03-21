@@ -2,18 +2,13 @@ version: '3'
 services:
   nginx:
     image: nginx:latest
-    container_name: ses-nginx
+    container_name: pika-nginx
     restart: always
     volumes:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf:/etc/nginx/conf.d
       - ./dist:/usr/share/nginx/html/pika-admin
     networks:
-      - ses-net
+      - pika-net
     ports:
       - 8080:9090
-
-networks:
-  ses-net:
-    external:
-      name: docker-compose_sc-net

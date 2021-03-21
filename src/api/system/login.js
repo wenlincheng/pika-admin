@@ -5,6 +5,8 @@ export function login(data) {
   const loginParams = {
     username: data.username,
     password: data.password,
+    validateCode: data.validateCode,
+    uuid: data.uuid,
     grant_type: 'password',
     scope: 'read'
   }
@@ -12,6 +14,14 @@ export function login(data) {
     url: '/pika-auth/login/v1',
     method: 'post',
     data: loginParams
+  })
+}
+
+// 获取验证码
+export function getCode() {
+  return request({
+    url: '/pika-auth/auth/code',
+    method: 'get'
   })
 }
 

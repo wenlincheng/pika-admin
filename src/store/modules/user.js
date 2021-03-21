@@ -37,10 +37,10 @@ const mutations = {
 const actions = {
   // 用户登录存储令牌
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, validateCode, uuid } = userInfo
     return new Promise((resolve, reject) => {
       // 登录
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ username: username.trim(), password: password, validateCode: validateCode.trim(), uuid: uuid }).then(response => {
         commit('SET_TOKEN', response.data.accessToken)
         setToken(response.data.accessToken)
         resolve()

@@ -1,9 +1,8 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-
       <div class="title-container">
-        <h3 class="title">三叉树后台管理</h3>
+        <h3 class="title">系统登录</h3>
       </div>
       <!-- 用户名 -->
       <el-form-item prop="username">
@@ -13,11 +12,11 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
-          autocomplete="on"
+          autocomplete="off"
         />
       </el-form-item>
       <!-- 密码 -->
@@ -31,10 +30,10 @@
             ref="password"
             v-model="loginForm.password"
             :type="passwordType"
-            placeholder="Password"
+            placeholder="密码"
             name="password"
             tabindex="2"
-            autocomplete="on"
+            autocomplete="off"
             @keyup.native="checkCapslock"
             @blur="capsTooltip = false"
             @keyup.enter.native="handleLogin"
@@ -45,32 +44,39 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-
-<!--      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : password</span>
+      <el-form-item prop="validateCode">
+        <span class="svg-container">
+          <svg-icon icon-class="message" />
+        </span>
+        <el-input
+          ref="validateCode"
+          v-model="loginForm.validateCode"
+          placeholder="验证码"
+          name="validateCode"
+          type="text"
+          tabindex="3"
+          autocomplete="off"
+          style="width: 50%;"
+        />
+        <div class="login-code">
+          <img :src="validateCode.codeImg" class="login-code-img" @click="loadCode">
         </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
-      </div>-->
+      </el-form-item>
+      <div class="tips-password">
+        <span>
+          <a @click="findPassword">忘记密码？</a>
+        </span>
+      </div>
+      <el-form-item style="background: #fff;border: none">
+        <el-button :loading="loading" type="primary" style=" width: 100%;" @click.native.prevent="handleLogin">登录</el-button>
+      </el-form-item>
     </el-form>
-
-<!--    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>-->
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { getCode } from '@/api/system/login'
 import SocialSign from './components/SocialSignin'
 
 export default {
@@ -79,26 +85,33 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('请输入用户名'))
+        callback(new Error('用户名不能为空'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能少于6位'))
+      if (value.length === 0) {
+        callback(new Error('密码不能为空'))
       } else {
         callback()
       }
     }
     return {
+      validateCode: {
+        codeImg: '',
+        uuid: ''
+      },
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: '',
+        validateCode: '',
+        uuid: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        validateCode: [{ required: true, message: '验证码不能为空', trigger: 'blur' }]
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -122,12 +135,15 @@ export default {
   },
   created() {
     // window.addEventListener('storage', this.afterQRScan)
+    this.loadCode()
   },
   mounted() {
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
+    } else if (this.loginForm.validateCode === '') {
+      this.$refs.validateCode.focus()
     }
   },
   destroyed() {
@@ -163,6 +179,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+          // 调用store的login
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
@@ -172,9 +189,28 @@ export default {
               this.loading = false
             })
         } else {
-          console.log('error submit!!')
           return false
         }
+      })
+    },
+    // 注册
+    register() {
+      this.$router.push({ path: '/register' })
+    },
+    // 忘记用户名
+    findUser() {
+
+    },
+    // 忘记密码
+    findPassword() {
+
+    },
+    // 获取验证码
+    loadCode() {
+      getCode().then(res => {
+        this.validateCode.codeImg = res.data.codeImg
+        this.validateCode.uuid = res.data.uuid
+        this.loginForm.uuid = res.data.uuid
       })
     },
     getOtherQuery(query) {
@@ -185,24 +221,6 @@ export default {
         return acc
       }, {})
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
@@ -211,9 +229,9 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
+$bg: #bbc0c1;
+$light_gray:#353535;
+$cursor: #181818;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -230,16 +248,16 @@ $cursor: #fff;
 
     input {
       background: transparent;
-      border: 0px;
+      border: 0;
       -webkit-appearance: none;
-      border-radius: 0px;
+      border-radius: 0;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
       height: 47px;
       caret-color: $cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
       }
     }
@@ -257,21 +275,47 @@ $cursor: #fff;
 <style lang="scss" scoped>
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
-$light_gray:#eee;
+$light_gray:#666;
 
 .login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-image: url("../../assets/login_images/login_bg.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
 
   .login-form {
     position: relative;
-    width: 520px;
+    width: 420px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    padding: 28px 25px 12px 28px;
     overflow: hidden;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+
+  .login-code {
+    width: 33%;
+    height: 49px;
+    float: right;
+    img {
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+  }
+
+  .login-code-img {
+    height: 49px;
+  }
+
+  .tips-password {
+    font-size: 14px;
+    float: right;
+    margin: auto 0 16px 24px;
   }
 
   .tips {
@@ -300,7 +344,7 @@ $light_gray:#eee;
     .title {
       font-size: 26px;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      margin: 0 auto 40px auto;
       text-align: center;
       font-weight: bold;
     }

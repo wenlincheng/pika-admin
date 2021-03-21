@@ -14,7 +14,6 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    console.log('-------> 发送请求')
     // 设置令牌
     if (store.getters.token) {
       // let each request carry token
@@ -48,7 +47,6 @@ service.interceptors.response.use(
 
     // HTTP Status
     if (response.status !== 200) {
-      console.log(res)
       if (res.code === 401) {
         Message({
           message: '无权限访问',
@@ -66,7 +64,7 @@ service.interceptors.response.use(
     } else {
       // 判断自定义的错误码
       // 重新登录
-      if (res.code === 406 || res.code === 407 || res.code === 408) {
+      if (res.code === 20403 || res.code === 20406 || res.code === 20407 || res.code === 20408) {
         // to re-login
         MessageBox.confirm('登录已注销，可以取消以保留在该页面上，或者再次登录', '登录失效', {
           confirmButtonText: '重新登录',
