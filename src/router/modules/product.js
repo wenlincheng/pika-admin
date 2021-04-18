@@ -11,31 +11,18 @@ const productRouter = {
   },
   children: [
     {
-      path: '/product-center/item',
-      component: () => import('@/views/product-center/item'),
-      name: 'Item',
-      meta: {
-        title: '商品管理',
-        icon: 'peoples'
-      }
-    },
-    {
-      path: '/product-center/category',
-      component: () => import('@/views/product-center/category'),
-      name: 'Category',
-      meta: {
-        title: '分类管理',
-        icon: 'role'
-      }
-    },
-    {
-      path: '/product-center/group',
-      component: () => import('@/views/product-center/group'),
-      name: 'Group',
-      meta: {
-        title: '分组管理',
-        icon: 'table'
-      }
+      path: '/product-center/item/formStepOne',
+      component: Layout,
+      redirect: '/product-center/item/formStepOne',
+      hidden: true,
+      children: [
+        {
+          path: 'index',
+          component: () => import('@/views/product-center/item/formStepOne'),
+          name: 'itemFormStepOne',
+          meta: { title: '商品表单', icon: 'user', noCache: true }
+        }
+      ]
     }
   ]
 }

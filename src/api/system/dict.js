@@ -1,49 +1,49 @@
 import request from '@/utils/request'
 
-export function queryGateway(data) {
+export function queryDict(data) {
   data.orders = data.order
   return request({
-    url: 'pika-upms/gateway/page',
+    url: 'pika-upms/dict/page',
     method: 'get',
     params: data
   })
 }
 
-export function getGateway(id) {
+export function getDict(id) {
   return request({
-    url: '/pika-upms/gateway/' + id,
+    url: '/pika-upms/dict/' + id,
     method: 'get'
   })
 }
 
-export function addGateway(data) {
+export function addDict(data) {
   data.orders = data.order
   return request({
-    url: 'pika-upms/gateway',
+    url: 'pika-upms/dict',
     method: 'post',
     data
   })
 }
 
-export function deleteGateway(id) {
+export function deleteDict(id) {
   return request({
-    url: 'pika-upms/gateway/' + id,
+    url: 'pika-upms/dict/' + id,
     method: 'delete'
   })
 }
 
-export function updateGateway(data) {
+export function updateDict(data) {
   data.orders = data.order
   return request({
-    url: 'pika-upms/gateway',
+    url: 'pika-upms/dict',
     method: 'put',
     data
   })
 }
 
-export function refreshGateway() {
+export function refreshDict() {
   return request({
-    url: 'pika-upms/gateway/refresh',
+    url: 'pika-upms/dict/refresh',
     method: 'post'
   })
 }

@@ -7,14 +7,6 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import systemRouter from './modules/system'
-import productRouter from './modules/product'
-import contentRouter from './modules/content'
-import devopsRouter from './modules/deops'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
-import marketingRouter from './modules/marketing'
-import memberRouter from './modules/member'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -105,51 +97,7 @@ export const constantRoutes = [
         meta: { title: '个人中心', icon: 'user', noCache: true }
       }
     ]
-  },
-  {
-    path: '/product-center/item/formStepOne',
-    component: Layout,
-    redirect: '/product-center/item/formStepOne',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/product-center/item/formStepOne'),
-        name: 'itemFormStepOne',
-        meta: { title: '商品表单', icon: 'user', noCache: true }
-      }
-    ]
   }
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
-  /** when your routing map is too long, you can split it into small modules **/
-  productRouter,
-  marketingRouter,
-  memberRouter,
-  contentRouter,
-  nestedRouter,
-  tableRouter,
-  {
-    path: '/icon',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'Icons', icon: 'icon', noCache: true }
-      }
-    ]
-  },
-  devopsRouter,
-  systemRouter,
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

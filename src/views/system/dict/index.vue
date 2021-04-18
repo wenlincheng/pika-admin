@@ -6,7 +6,7 @@
         v-model="listQuery.code"
         style="width: 200px;"
         class="filter-item"
-        placeholder="路由id"
+        placeholder="字典名称"
         @keyup.enter.native="handleFilter"
       />
       <el-select
@@ -43,14 +43,13 @@
         type="danger"
         :loading="downloadLoading"
         icon="el-icon-refresh"
-        @click="refreshGateway"
+        @click="refreshDict"
       >
         发布路由
       </el-button>
     </div>
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-<!--      <el-table-column type="index" width="50" align="center" label="序列" />-->
       <el-table-column width="120px" align="left" label="路由ID">
         <template slot-scope="scope">
           <span>{{ scope.row.routeId }}</span>
@@ -224,7 +223,7 @@
 <script>
 
 import waves from '@/directive/waves'
-import { queryGateway, getGateway, addGateway, deleteGateway, updateGateway, refreshGateway } from '@/api/system/gateway'
+import { queryDict, getDict, addDict, deleteDict, updateDict, refreshDict } from '@/api/system/dict'
 
 export default {
   name: 'Index',
@@ -288,19 +287,19 @@ export default {
           }
         }]
       },
-      gatewayType: [{
+      dictType: [{
         value: 'Y',
         label: 'Y'
       }, {
         value: 'N',
         label: 'N'
       }],
-      defaultGateway: 'Y',
+      defaultDict: 'Y',
       downloadLoading: false
     }
   },
   created() {
-    this.queryGateway()
+    this.queryDict()
   },
   methods: {
     /**
@@ -340,9 +339,9 @@ export default {
     /**
      * 查询路由列表
      */
-    queryGateway() {
+    queryDict() {
       this.listLoading = true
-      queryGateway(this.listQuery).then(res => {
+      queryDict(this.listQuery).then(res => {
         this.list = res.data.records
         this.total = res.data.total
         this.listLoading = false
@@ -351,13 +350,13 @@ export default {
     /**
      * 发布路由
      */
-    refreshGateway() {
+    refreshDict() {
       this.$confirm('此操作将发布网关路由到线上, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        refreshGateway().then(() => {
+        refreshDict().then(() => {
           this.$notify({
             title: '发布成功',
             message: '发布成功',
@@ -369,21 +368,21 @@ export default {
     },
     handleFilter() {
       this.listQuery.current = 1
-      this.queryGateway()
+      this.queryDict()
     },
     /**
      * 修改每页显示条数
      */
     handleSizeChange(val) {
       this.listQuery.size = val
-      this.queryGateway()
+      this.queryDict()
     },
     /**
      * 跳转到指定页
      */
     handleCurrentChange(val) {
       this.listQuery.current = val
-      this.queryGateway()
+      this.queryDict()
     },
     /**
      * 弹出新增路由对话框
@@ -425,8 +424,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.dataForm.status = this.defaultGateway
-          addGateway(this.dataForm).then(() => {
+          this.dataForm.status = this.defaultDict
+          addDict(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '创建成功',
@@ -434,7 +433,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.queryGateway()
+            this.queryDict()
           })
         }
       })
@@ -443,7 +442,7 @@ export default {
      * 弹出更新路由对话框
      */
     handleUpdate(id) {
-      getGateway(id).then(({ data }) => {
+      getDict(id).then(({ data }) => {
         this.dataForm.id = data.id
         this.dataForm.routeId = data.routeId
         this.dataForm.uri = data.uri
@@ -458,7 +457,7 @@ export default {
           this.dataForm.filters[j].args.parts = data.filters[j].args.parts
         }
       })
-      this.defaultGateway = this.dataForm.status
+      this.defaultDict = this.dataForm.status
       this.dialogStatus = 'edit'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -471,7 +470,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateGateway(this.dataForm).then(() => {
+          updateDict(this.dataForm).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '编辑成功',
@@ -479,7 +478,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.queryGateway()
+            this.queryDict()
           })
         }
       })
@@ -494,14 +493,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteGateway(id).then(() => {
+        deleteDict(id).then(() => {
           this.$notify({
             title: '删除成功',
             message: '删除成功',
             type: 'success',
             duration: 2000
           })
-          this.queryGateway()
+          this.queryDict()
         })
       })
     },
