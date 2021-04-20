@@ -21,7 +21,7 @@
         clearable
         style="width: 150px"
         class="filter-item"
-        placeholder="请选择路由类型"
+        placeholder="状态"
         @keyup.enter.native="handleFilter"
       >
         <el-option
