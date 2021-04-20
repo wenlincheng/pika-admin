@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
   >
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" @keyup.enter.native="dataFormSubmit()">
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" style="width: 90%; margin:30px;" @keyup.enter.native="dataFormSubmit()">
       <el-form-item label="角色代码" prop="code">
         <el-input v-model="dataForm.code" placeholder="请输入角色代码" />
       </el-form-item>

@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
   >
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" @keyup.enter.native="dataFormSubmit()">
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" style="width: 90%; margin:30px;" @keyup.enter.native="dataFormSubmit()">
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="dataForm.type">
           <el-radio v-for="(type, index) in typeList" :key="index" :label="index">{{ type }}</el-radio>

@@ -140,7 +140,7 @@
     </div>
 
     <!--添加或编辑对话框-->
-    <el-dialog title="新增/修改" :visible.sync="dialogFormVisible">
+    <el-dialog :title="!dataForm.id ? '新增' : '修改'" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -148,7 +148,7 @@
         label-position="right"
         label-width="120px"
         status-icon
-        style="width: 80%; margin-left:60px;"
+        style="width: 90%; margin:30px;"
       >
         <el-form-item label="用户名" prop="username">
           <el-input v-model="dataForm.username" placeholder="请输入用户名" />
