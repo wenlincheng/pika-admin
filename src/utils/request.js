@@ -44,7 +44,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-
+    console.log(response.status)
     // HTTP Status
     if (response.status !== 200) {
       if (res.code === 401) {
@@ -61,6 +61,12 @@ service.interceptors.response.use(
         })
       }
       return Promise.reject(new Error(res.msg || 'Error'))
+    } else if (response.status === 503) {
+      Message({
+        message: '服务未就绪',
+        type: 'error',
+        duration: 5 * 1000
+      })
     } else {
       // 判断自定义的错误码
       // 重新登录

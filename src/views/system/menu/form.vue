@@ -44,7 +44,7 @@
         <el-input v-model="dataForm.code" placeholder="与请求方法组成唯一键 如: sys:user:list" />
       </el-form-item>
       <el-form-item label="排序号" prop="sequence">
-        <el-input-number v-model="dataForm.sequence" controls-position="right" :min="0" label="排序号" />
+        <el-input-number v-model="dataForm.sort" controls-position="right" :min="0" label="排序号" />
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 2" label="菜单图标" prop="icon">
         <el-row>
@@ -110,7 +110,7 @@ export default {
         uri: '',
         method: '',
         code: '',
-        sequence: 0,
+        sort: 0,
         icon: ''
       },
       typeList: ['目录', '菜单', '按钮'],
@@ -174,7 +174,7 @@ export default {
             this.dataForm.uri = data.uri
             this.dataForm.method = data.method
             this.dataForm.code = data.code
-            this.dataForm.sequence = data.sequence
+            this.dataForm.sort = data.sort
             this.dataForm.icon = data.icon
             this.selectedMenu = idList(this.menuList, data.parentId, 'id', 'children').reverse()
           })

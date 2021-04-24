@@ -128,15 +128,15 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        0: 'info',
-        1: 'success'
+        'ENABLE': 'success',
+        'DISABLE': 'danger'
       }
       return statusMap[status]
     },
     statusNameFilter(status) {
       const statusMap = {
-        0: '锁定',
-        1: '激活'
+        'ENABLE': '启用',
+        'DISABLE': '禁用'
       }
       return statusMap[status]
     }
@@ -154,8 +154,8 @@ export default {
         size: 10
       },
       userStatus: [
-        { key: '激活', value: 1 },
-        { key: '锁定', value: 0 }
+        { key: '启用', value: 'ENABLE' },
+        { key: '禁用', value: 'DISABLE' }
       ],
       dialogStatus: 'create',
       dialogFormVisible: false,

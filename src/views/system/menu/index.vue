@@ -73,7 +73,7 @@
         label="授权标识"
       />
       <el-table-column
-        prop="sequence"
+        prop="sort"
         header-align="center"
         align="center"
         label="排序号"

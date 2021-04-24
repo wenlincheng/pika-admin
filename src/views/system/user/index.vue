@@ -182,8 +182,11 @@
             />
           </el-select>
         </el-form-item>
-
-        <el-form-item label="用户详情" prop="description">
+        <el-form-item label="状态" prop="status">
+          <el-radio v-model="dataForm.status" label="ENABLE">启用</el-radio>
+          <el-radio v-model="dataForm.status" label="DISABLE">禁用</el-radio>
+        </el-form-item>
+        <el-form-item label="用户描述" prop="description">
           <el-input
             v-model="dataForm.description"
             :rows="5"
@@ -340,7 +343,7 @@ export default {
       this.dataForm = {
         username: '',
         avatar: '',
-        status: 0,
+        status: '',
         name: '',
         password: '',
         roleIds: [],

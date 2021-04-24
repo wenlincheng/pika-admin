@@ -11,6 +11,10 @@
       <el-form-item label="角色名称" prop="name">
         <el-input v-model="dataForm.name" placeholder="请输入角色名称" />
       </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-radio v-model="dataForm.status" label="ENABLE">启用</el-radio>
+        <el-radio v-model="dataForm.status" label="DISABLE">禁用</el-radio>
+      </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="2" placeholder="请输入描述内容" />
       </el-form-item>
@@ -89,6 +93,7 @@ export default {
             this.dataForm.id = data.id
             this.dataForm.code = data.code
             this.dataForm.name = data.name
+            this.dataForm.status = data.status
             this.dataForm.description = data.description
             this.$nextTick(() => {
               data.menuIdList.forEach(menuId => {
