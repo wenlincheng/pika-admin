@@ -10,6 +10,3 @@
 ## 简介
 [电商平台的前端项目](https://gitee.com/wenlincheng/pika)
 
-# 始作俑者
-
-- Pikaman
