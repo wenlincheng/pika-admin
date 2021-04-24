@@ -1,8 +1,6 @@
 import { login, logout, getUserInfo, updatePassword } from '@/api/system/login'
-// import { queryMenuRouter } from '@/api/system/menu'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
-// import store from '..'
 
 const state = {
   token: getToken(),
@@ -102,7 +100,6 @@ const actions = {
   // 修改密码
   updatePassword({ commit }, updatePasswordForm) {
     const { oldPassword, password, confirmPassword } = updatePasswordForm
-    console.log(updatePasswordForm)
     return new Promise((resolve, reject) => {
       updatePassword({ oldPassword: oldPassword, password: password, confirmPassword: confirmPassword }).then(() => {
         commit('SET_TOKEN', '')

@@ -10,6 +10,7 @@ const getters = {
   name: state => state.user.name,
   introduction: state => state.user.introduction,
   roles: state => state.user.roles,
+  dictTypes: state => state.dict.dictList,
   permission_routes: state => state.permission.routes,
   errorLogs: state => state.errorLog.logs,
   nacosServer: state => state.api.nacosServer,

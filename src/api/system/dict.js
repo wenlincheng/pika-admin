@@ -16,6 +16,13 @@ export function getDict(id) {
   })
 }
 
+export function getDictTypeList() {
+  return request({
+    url: '/pika-upms/dict/list',
+    method: 'get'
+  })
+}
+
 export function addDict(data) {
   data.orders = data.order
   return request({

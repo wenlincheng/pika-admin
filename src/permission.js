@@ -39,6 +39,8 @@ router.beforeEach(async(to, from, next) => {
 
           // 动态加载菜单
           router.addRoutes(accessRoutes)
+          // 加载字典
+          await store.dispatch('dict/getDictList')
 
           // hack方法，以确保addRoutes完成
           // 设置replace：true，因此导航将不会留下历史记录

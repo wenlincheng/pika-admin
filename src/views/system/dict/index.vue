@@ -17,7 +17,7 @@
         @keyup.enter.native="handleFilter"
       />
       <el-select
-        v-model="listQuery.type"
+        v-model="listQuery.status"
         clearable
         style="width: 150px"
         class="filter-item"
@@ -32,7 +32,10 @@
         />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
+      <div style="margin-top: 20px">
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
+      </div>
     </div>
 
     <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
@@ -141,25 +144,29 @@
             placeholder="请输入字典值"
           />
           <el-input
-            v-model="dictValue.status"
-            :prop="'dictValue.' + index + '.status'"
-            style="width: 20%"
-            placeholder="请输入状态"
-          />
-          <el-input
             v-model="dictValue.sort"
             :prop="'dictValue.' + index + '.sort'"
             style="width: 15%"
             type="number"
             placeholder="请输入排序"
           />
+          <el-switch
+            v-model="dictValue.status"
+            :prop="'dictValue.' + index + '.status'"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-value="ENABLE"
+            inactive-value="DISABLE"
+            active-text="启用"
+            inactive-text="禁用"
+          />
           <el-button type="danger" icon="el-icon-minus" circle size="mini" @click="removeDictValue(index)" />
           <el-button type="primary" icon="el-icon-plus" circle size="mini" @click="addDictValue" />
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
-          <el-radio v-model="dataForm.status" label="1">启用</el-radio>
-          <el-radio v-model="dataForm.status" label="2">禁用</el-radio>
+          <el-radio v-model="dataForm.status" label="ENABLE">启用</el-radio>
+          <el-radio v-model="dataForm.status" label="DISABLE">禁用</el-radio>
         </el-form-item>
 
         <el-form-item label="描述" prop="description">
@@ -179,8 +186,6 @@
 <script>
 
 import waves from '@/directive/waves'
-import { queryDict, getDict, addDict, deleteDict, updateDict } from '@/api/system/dict'
-
 export default {
   name: 'Index',
   directives: {
@@ -190,16 +195,16 @@ export default {
     // 状态标签样式
     statusFilter(status) {
       const statusMap = {
-        0: 'danger',
-        1: 'success'
+        'ENABLE': 'success',
+        'DISABLE': 'danger'
       }
       return statusMap[status]
     },
     // 状态名称
     statusNameFilter(status) {
       const statusMap = {
-        0: '锁定',
-        1: '激活'
+        'ENABLE': '启用',
+        'DISABLE': '禁用'
       }
       return statusMap[status]
     }
@@ -210,14 +215,10 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
-        status: 'ok',
         current: 1,
         size: 10
       },
-      dictTypeStatus: [
-        { key: '启用', value: 1 },
-        { key: '禁用', value: 2 }
-      ],
+      dictTypeStatus: [],
       dialogStatus: 'create',
       dialogFormVisible: false,
       rules: {
@@ -242,6 +243,7 @@ export default {
     }
   },
   created() {
+    this.dictTypeStatus = store.getters.dictTypes['STATUS']
     this.queryDict()
   },
   methods: {
@@ -276,6 +278,16 @@ export default {
     },
     handleFilter() {
       this.listQuery.current = 1
+      this.queryDict()
+    },
+    /**
+     * 重置搜索条件
+     */
+    handleRefresh() {
+      this.listQuery = {
+        current: 1,
+        size: 10
+      }
       this.queryDict()
     },
     /**
@@ -407,6 +419,9 @@ export default {
     }
   }
 }
+import store from '@/store'
+
+import { queryDict, getDict, addDict, deleteDict, updateDict } from '@/api/system/dict'
 </script>
 
 <style scoped>

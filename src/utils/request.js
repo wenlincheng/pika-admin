@@ -77,7 +77,7 @@ service.interceptors.response.use(
         })
       } else if (res.code !== 200) {
         Message({
-          message: res.msg || 'Error',
+          message: res.msg || '系统错误',
           type: 'error',
           duration: 5 * 1000
         })
@@ -86,9 +86,8 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      message: '系统错误',
       type: 'error',
       duration: 5 * 1000
     })

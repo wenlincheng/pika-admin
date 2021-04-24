@@ -42,8 +42,7 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh" @click="handleRefresh">重置</el-button>
       <!--动作按钮-->
       <div style="margin-top: 20px">
-        <el-button v-waves class="filter-item" type="primary" @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-        <el-button v-waves class="filter-item" type="primary" @click="toggleSelection()">取消选择</el-button>
+        <el-button v-waves class="filter-item" type="danger" @click="batchDelete()">批量删除</el-button>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-download" :loading="downloadLoading" @click="handleDownload">导出</el-button>
       </div>
@@ -208,6 +207,7 @@ import { queryUser, getUser, createUser, updateUser, deleteUser } from '@/api/sy
 import { getAllRoles } from '@/api/system/role'
 
 import waves from '@/directive/waves'
+import { Message } from 'element-ui'
 
 export default {
   name: 'UserManagement',
@@ -219,15 +219,15 @@ export default {
     // 用户状态标签样式
     statusFilter(status) {
       const statusMap = {
-        0: 'danger',
-        1: 'success'
+        'ENABLE': 'success',
+        'DISABLE': 'danger'
       }
       return statusMap[status]
     },
     statusNameFilter(status) {
       const statusMap = {
-        0: '锁定',
-        1: '激活'
+        'ENABLE': '启用',
+        'DISABLE': '禁用'
       }
       return statusMap[status]
     },
@@ -254,8 +254,8 @@ export default {
       },
       // 用户状态
       userStatus: [
-        { key: '激活', value: 1 },
-        { key: '锁定', value: 0 }],
+        { key: '启用', value: 'ENABLE' },
+        { key: '禁用', value: 'DISABLE' }],
       roleList: [],
       dialogStatus: 'create',
       dialogFormVisible: false,
@@ -281,15 +281,6 @@ export default {
     this.resetForm()
   },
   methods: {
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
     // 批量选择
     handleSelectionChange(val) {
       this.multipleSelection = val
@@ -435,15 +426,35 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteUser(id).then(() => {
-          this.$notify({
-            title: '删除成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
           this.queryUser()
         })
       })
+    },
+    // 批量删除
+    batchDelete() {
+      if (this.multipleSelection.length > 0) {
+        this.$confirm('此操作将删除选中的用户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true,
+          type: 'warning'
+        }).then(() => {
+          const ids = []
+          this.multipleSelection.forEach(user => {
+            ids.push(user.id)
+          })
+
+          deleteUser(ids).then(() => {
+            this.queryUser()
+          })
+        })
+      } else {
+        Message({
+          message: '请选择要删除的用户',
+          type: 'warning',
+          duration: 2 * 1000
+        })
+      }
     },
     /**
        * 重置用户密码
