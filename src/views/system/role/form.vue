@@ -60,6 +60,7 @@ export default {
       dataForm: {
         code: '',
         name: '',
+        status: '',
         description: '',
         menuIdList: []
       },
